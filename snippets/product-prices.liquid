@@ -1,0 +1,23 @@
+{% comment %}
+  Renders product prices
+  Accepts:
+  - product: {Object} Product Liquid object
+{% endcomment %}
+
+<div class="mt-1 flex items-center gap-2">
+  {% if product.compare_at_price > product.price %}
+    <span class="text-primary font-medium" data-product-price data-product-id="{{ product.id }}">
+      <s class="mr-2 text-gray-500 line-through">{{ product.compare_at_price | money }}</s>
+      <span class="text-red-400">{{ product.price | money }}</span>
+    </span>
+  {% elsif product.price_varies %}
+    <span class="text-primary font-medium" data-product-price data-product-id="{{ product.id }}">
+      <span class="mr-0.5 text-sm text-gray-500">FROM</span>
+      <span>{{ product.price_min | money }}</span>
+    </span>
+  {% else %}
+    <span class="text-primary font-medium" data-product-price data-product-id="{{ product.id }}">
+      {{ product.price | money }}
+    </span>
+  {% endif %}
+</div>

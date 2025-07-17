@@ -1,0 +1,53 @@
+@import "tailwindcss" source("../..");
+
+@plugin '@tailwindcss/typography';
+@plugin '@tailwindcss/forms';
+
+@theme {
+  /* Reference CSS variables defined in theme-variables.liquid */
+  --color-primary-light: var(--color-primary-light);
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+
+  --color-accent-light: var(--color-accent-light);
+  --color-accent: var(--color-accent);
+  --color-accent-dark: var(--color-accent-dark);
+
+  --color-secondary-light: var(--color-secondary-light);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-dark: var(--color-secondary-dark);
+
+  --color-tertiary-light: var(--color-tertiary-light);
+  --color-tertiary: var(--color-tertiary);
+  --color-tertiary-dark: var(--color-tertiary-dark);
+
+  /* Additional theme variables */
+  --spacing-nav: var(--height-nav);
+  --spacing-screen-no-nav: calc(var(--screen-height, 100vh) - var(--height-nav));
+  --spacing-mobileGallery: calc(100vw - 3rem);
+  --spacing-prose-narrow: 45ch;
+  --spacing-prose-wide: 80ch;
+
+  --font-body: var(--font-body-family);
+  --font-heading: var(--font-heading-family);
+
+  --text-display: var(--font-size-display);
+  --text-display-line-height: 1.1;
+  --text-heading: var(--font-size-heading);
+  --text-heading-line-height: 1.25;
+  --text-lead: var(--font-size-lead);
+  --text-lead-line-height: 1.333;
+  --text-copy: var(--font-size-copy);
+  --text-copy-line-height: 1.5;
+  --text-fine: var(--font-size-fine);
+  --text-fine-line-height: 1.333;
+
+  --shadow-border: inset 0px 0px 0px 1px rgb(var(--color-primary) / 0.08);
+  --shadow-dark-header: inset 0px -1px 0px 0px rgba(21, 21, 21, 0.4);
+  --shadow-light-header: inset 0px -1px 0px 0px rgba(21, 21, 21, 0.05);
+}
+
+/* Base styles */
+@import "@/styles/base.css" layer(base);
+@import "@/styles/components.css" layer(components);
+@import "@/styles/utilities.css" layer(utilities);

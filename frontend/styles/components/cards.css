@@ -1,0 +1,45 @@
+/* Card component styles */
+.card {
+  @apply overflow-hidden rounded-lg shadow-md;
+}
+
+.card-header {
+  @apply border-b border-gray-200 p-4;
+}
+
+.card-body {
+  @apply p-4;
+}
+
+.card-footer {
+  @apply border-t border-gray-200 p-4;
+}
+
+/* Card variants */
+.card-primary {
+  @apply border border-[var(--color-primary)];
+}
+
+.card-primary .card-header {
+  @apply bg-[var(--color-primary)] text-white;
+}
+
+.card-accent {
+  @apply border border-[var(--color-accent)];
+}
+
+.card-accent .card-header {
+  @apply bg-[var(--color-accent)] text-white;
+}
+
+.card-secondary {
+  @apply border border-[var(--color-secondary)];
+}
+
+.card-secondary .card-header {
+  @apply bg-[var(--color-secondary)] text-white;
+}
+
+.card-tertiary {
+  @apply bg-[var(--color-tertiary)];
+}

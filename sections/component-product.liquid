@@ -1,0 +1,163 @@
+<section class="relative md:my-6">
+  <div class="theme-container p-4">
+    {% assign current_product = product %}
+
+    <div class="mb-12 grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
+      <div class="max-md:-mx-4 max-md:-mt-4 md:sticky md:top-8 md:self-start">
+        {%- render 'product-gallery' -%}
+      </div>
+
+      <div class="flex flex-col gap-6">
+        <div class="product-info text-center md:text-left bg-white p-8 rounded-3xl shadow-[0_0_0_1px_#0000000f,0_1px_1px_-0.5px_#0000000f,0_3px_3px_-1.5px_#0000000f,0_6px_6px_-3px_#0000000f,0_12px_12px_-6px_#0000000f,0_24px_24px_-12px_#0000000f]">
+          <div class="flex items-center justify-between">
+            <h1 class="text-3xl font-bold">{{ product.title }}</h1>
+            {%- render 'product-price', product: current_product -%}
+          </div>
+          
+
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'product_attributes' %}
+                {%- render 'product-attributes', product: current_product -%}
+              {% when 'variant_picker' %}
+                {%- render 'product-variant-picker', product: current_product -%}
+              {% when 'buy_buttons' %}
+                {%- render 'product-buy-button', product: current_product -%}
+            {% endcase %}
+          {% endfor %}
+        </div>
+
+        <div class="product-details space-y-6 text-center md:text-left bg-white p-4 rounded-3xl shadow-[0_0_0_1px_#0000000f,0_1px_1px_-0.5px_#0000000f,0_3px_3px_-1.5px_#0000000f,0_6px_6px_-3px_#0000000f,0_12px_12px_-6px_#0000000f,0_24px_24px_-12px_#0000000f,0_24px_24px_-12px_#0000000f]">
+          <details
+            class="group overflow-hidden transition-all duration-300 ease-in-out"
+            data-animated-details
+          >
+            <summary class="flex cursor-pointer items-center justify-between font-medium transition-colors duration-200 focus:outline-none">
+              <span class="text-lg font-medium">Details</span>
+              <span class="transform transition-transform duration-300 group-open:rotate-180">
+                {% render 'icons', icon: 'chevron' %}
+              </span>
+            </summary>
+            <div class="details-content prose py-3 transition-all duration-300 ease-in-out">
+              {{ product.description }}
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Template",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "product_attributes",
+      "name": "Product Attributes",
+      "limit": 1
+    },
+    {
+      "type": "product_price",
+      "name": "Product Price",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant Picker",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy Buttons",
+      "limit": 1
+    },
+    {
+      "type": "countdown",
+      "name": "Countdown Timer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "countdown_end_date",
+          "label": "Countdown end date",
+          "info": "Format: YYYY-MM-DD HH:MM:SS"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "name": "Custom HTML",
+      "settings": [
+        {
+          "type": "html",
+          "id": "html_content",
+          "label": "HTML content"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text_content",
+          "label": "Content"
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion Group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "id",
+          "label": "Accordion ID",
+          "default": "accordion-1"
+        }
+      ]
+    },
+    {
+      "type": "accordion_item",
+      "name": "Accordion Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Item Title",
+          "default": "Accordion Item"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Item Content"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "pot_selector",
+      "name": "Pot Selector",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Template",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

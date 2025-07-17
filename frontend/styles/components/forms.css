@@ -1,0 +1,32 @@
+/* Form component styles */
+.form-group {
+  @apply mb-4;
+}
+
+.form-label {
+  @apply mb-1 block text-sm font-medium text-gray-700;
+}
+
+.form-input {
+  @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-[var(--color-primary)] focus:ring focus:ring-[var(--color-primary)];
+}
+
+.form-select {
+  @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-[var(--color-primary)] focus:ring focus:ring-[var(--color-primary)];
+}
+
+.form-checkbox {
+  @apply rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)];
+}
+
+.form-radio {
+  @apply border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)];
+}
+
+.form-error {
+  @apply mt-1 text-sm text-red-600;
+}
+
+.form-hint {
+  @apply mt-1 text-sm text-gray-500;
+}

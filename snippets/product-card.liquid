@@ -1,0 +1,53 @@
+{% comment %}
+  Renders a product card
+  Accepts:
+  - product: {Object} Product Liquid object
+  - rounded_corners: {Boolean} Whether to show rounded corners (optional)
+{% endcomment %}
+
+<div
+  class="product-card group relative"
+  data-product-id="{{ product.id }}"
+  data-price-varies="{{ product.price_varies }}"
+  data-loaded="true"
+>
+  <div class="relative">
+    <a href="{{ product.url }}" class="block">
+      <div class="aspect-square bg-gray-100 {% if rounded_corners %}rounded-lg{% endif %} mb-4 overflow-hidden">
+        {% if product.featured_image != blank %}
+          <img
+            src="{{ product.featured_image | image_url: width: 600 }}"
+            alt="{{ product.featured_image.alt | escape }}"
+            class="h-full w-full object-cover transition-transform duration-500 "
+            loading="lazy"
+            width="600"
+            height="600"
+          >
+        {% else %}
+          <div class="flex h-full w-full items-center justify-center">
+            <span class="text-primary">{{ product.title }}</span>
+          </div>
+        {% endif %}
+      </div>
+    </a>
+
+    <button
+      class="absolute bottom-3 right-3 rounded-full bg-white p-2 opacity-90 shadow-sm transition-opacity hover:opacity-100"
+      aria-label="Add to wishlist"
+    >
+      {% render 'icons', icon: 'heart' %}
+    </button>
+  </div>
+
+  <div class="mt-2">
+    <a href="{{ product.url }}" class="block">
+      <h3 class="text-primary group-hover:text-accent font-base text-base transition-colors md:text-2xl">
+        {{ product.title | downcase }}
+      </h3>
+
+      <div class="product-prices">
+        {% render 'product-prices', product: product %}
+      </div>
+    </a>
+  </div>
+</div>

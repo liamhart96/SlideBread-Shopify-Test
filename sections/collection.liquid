@@ -1,0 +1,255 @@
+{%- assign products_per_page = section.settings.products_per_page | default: 12 -%}
+
+<div
+  class="collection-page theme-container px-4 py-8 md:px-6 lg:px-8"
+  data-section-id="{{ section.id }}"
+>
+  {% comment %} Collection Header {% endcomment %}
+  <div class="collection-header mb-8 text-center">
+    <h1 class="text-3xl font-bold md:text-4xl">{{ collection.title }}</h1>
+  </div>
+
+  {% comment %} Facets and Product Grid Layout {% endcomment %}
+  <div class="flex flex-col gap-8 lg:flex-row">
+    {% comment %} Facets Section - Hidden on mobile, sticky & scrollable on desktop {% endcomment %}
+    <div class="facets-wrapper hidden w-full lg:sticky lg:top-4 lg:block lg:max-h-[calc(100vh-2rem)] lg:w-1/4 lg:self-start lg:overflow-y-auto">
+      {% comment %} Content moved via JS on mobile {% endcomment %}
+      <div id="desktop-facets-container">
+        <form id="facet-filter-form">
+          <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+          <input type="hidden" name="filter.v.availability" value="1">
+          <div id="facets-container" class="facets-container space-y-6">
+            {%- for filter in collection.filters -%}
+              <div class="facet-filter border-b border-gray-200 pb-4">
+                <h3 class="text-primary mb-2 text-sm font-bold uppercase">
+                  {{ filter.label | escape }}
+                </h3>
+                <ul class="space-y-1">
+                  {%- case filter.type -%}
+                    {%- when 'price_range' -%}
+                      <li>
+                        <div class="flex items-center space-x-2">
+                          <span>{{ cart.currency.symbol }}</span>
+                          <input
+                            type="number"
+                            name="{{ filter.min_value.param_name }}"
+                            value="{{ filter.min_value.value | money_without_currency }}"
+                            placeholder="Min"
+                            class="w-20 rounded border-gray-300 text-sm"
+                          >
+                          <span>-</span>
+                          <input
+                            type="number"
+                            name="{{ filter.max_value.param_name }}"
+                            value="{{ filter.max_value.value | money_without_currency }}"
+                            placeholder="Max"
+                            class="w-20 rounded border-gray-300 text-sm"
+                          >
+                          <button
+                            type="submit"
+                            class="cursor-pointer rounded bg-gray-200 px-2 py-1 text-xs"
+                          >
+                            Go
+                          </button>
+                        </div>
+                      </li>
+                    {%- else -%}
+                      {%- comment %} Handles list, boolean, and other checkbox-style filters {%- endcomment %}
+                      {%- for value in filter.values -%}
+                        <li>
+                          <label class="group flex items-center text-sm">
+                            <input
+                              type="checkbox"
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              {% if value.active %}
+                                checked
+                              {% endif %}
+                              class="text-primary focus:ring-primary h-4 w-4 cursor-pointer rounded border-gray-300"
+                              onchange="this.form.submit()"
+                            >
+                            <span class="text-primary group-hover:text-accent ml-2 transition-colors">
+                              {{- value.label | escape }} ({{ value.count }})
+                            </span>
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                  {%- endcase -%}
+                </ul>
+              </div>
+            {%- endfor -%}
+
+            {% comment %} Active Filters / Clear All {% endcomment %}
+            <div class="active-filters mt-4 flex flex-wrap gap-2">
+              {%- for filter in collection.filters -%}
+                {%- for value in filter.active_values -%}
+                  {% comment %} Style active filter pills {% endcomment %}
+                  <a
+                    href="{{ value.url_to_remove }}"
+                    class="bg-primary inline-flex items-center rounded px-3 py-1 text-xs font-medium text-white hover:opacity-80"
+                  >
+                    {{ value.label | escape }}
+                    {% render 'icons', icon: 'close', class: 'ml-1.5 h-4 w-4 text-white' %}
+                  </a>
+                {%- endfor -%}
+              {%- endfor -%}
+              {%- if collection.filters.active_values_count > 0 -%}
+                <a
+                  href="{{ collection.url }}"
+                  class="hover:text-primary text-xs text-gray-500 underline"
+                  >Clear all</a
+                >
+              {% endif %}
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    {% comment %} Product Grid Section {% endcomment %}
+    <div class="product-grid-wrapper w-full lg:w-3/4">
+      {% comment %} Filter/Sort Controls Header {% endcomment %}
+      <div class="collection-controls mb-6 border-b border-gray-200 pb-4">
+        {% comment %} Row 1: Results Count (Mobile Only) {% endcomment %}
+        <div class="text-primary mb-4 text-center text-sm uppercase lg:hidden">
+          {{ collection.products_count }} results
+        </div>
+
+        {% comment %} Row 2: Filter Button (Mobile) / Results Count (Desktop) + Sorting {% endcomment %}
+        <div class="flex items-center justify-between">
+          {% comment %} Mobile Filter Button {% endcomment %}
+          <div class="lg:hidden">
+            {%- assign active_filter_count = collection.filters.active_values_count -%}
+            {%- comment %} Remove conditional class logic - JS will handle state {%- endcomment %}
+            <button
+              type="button"
+              id="mobile-filter-trigger"
+              class="text-primary inline-flex items-center rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium hover:bg-gray-50"
+            >
+              {% render 'icons', icon: 'filter', class: 'mr-2 h-5 w-5' %}
+              Filter
+              {% if active_filter_count > 0 -%}
+                <span class="filter-count ml-1">({{ active_filter_count }})</span>
+              {%- endif %}
+            </button>
+          </div>
+
+          {% comment %} Results Count (Desktop Only - Left Aligned) {% endcomment %}
+          <div class="text-primary hidden text-sm uppercase lg:block">
+            {{ collection.products_count }} results
+          </div>
+
+          {% comment %} Sorting Dropdown (Right Aligned) {% endcomment %}
+          <div class="flex items-center uppercase">
+            <label for="sort-by" class="text-primary mr-2 hidden text-sm font-medium sm:block"
+              >Sort by</label
+            >
+            <select
+              id="sort-by"
+              name="sort_by"
+              class="rounded border-gray-300 text-sm"
+              form="facet-filter-form"
+              onchange="this.form.submit()"
+            >
+              {%- for option in collection.sort_options -%}
+                <option
+                  value="{{ option.value }}"
+                  {% if option.value == collection.sort_by %}
+                    selected
+                  {% endif %}
+                >
+                  {{ option.name }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {% comment %} Infinite scroll element {% endcomment %}
+      <collection-infinite-scroll
+        data-collection-handle="{{ collection.handle }}"
+        data-products-per-page="{{ products_per_page }}"
+      >
+        {% paginate collection.products by products_per_page %}
+          <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+            {%- for product in collection.products -%}
+              {% render 'product-card', product: product, rounded_corners: true %}
+            {%- endfor -%}
+          </div>
+        {% endpaginate %}
+      </collection-infinite-scroll>
+
+      {% comment %} Hidden standard grid/pagination (for S&D app JS) {% endcomment %}
+      <div class="standard-grid-hidden hidden">
+        {% paginate collection.products by products_per_page %}
+          <div id="product-grid" data-id="{{ section.id }}">
+            {%- for product in collection.products -%}
+              {% render 'product-card', product: product %}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            <nav class="pagination">
+              {{ paginate | default_pagination }}
+            </nav>
+          {%- endif -%}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} Mobile Filter Modal/Drawer {% endcomment %}
+<div
+  id="mobile-filter-modal"
+  class="fixed inset-y-0 left-0 z-40 h-full w-full max-w-xs -translate-x-full transform overflow-y-auto bg-white shadow-xl transition duration-300 ease-in-out"
+  aria-labelledby="mobile-filter-heading"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="flex h-full flex-col p-4 sm:p-6">
+    <div class="mb-4 flex items-center justify-between border-b border-gray-200 pb-4">
+      <h2 id="mobile-filter-heading" class="text-primary text-lg font-medium">Filters</h2>
+      <button
+        type="button"
+        id="mobile-filter-close"
+        class="-mr-2 rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+      >
+        <span class="sr-only">Close filters</span>
+        {% render 'icons', icon: 'close', class: 'h-6 w-6' %}
+      </button>
+    </div>
+
+    {% comment %} Filter content will be moved here by JS {% endcomment %}
+    <div id="mobile-facets-content" class="flex-1 overflow-y-auto"></div>
+  </div>
+</div>
+
+{% comment %} Overlay for Mobile Filter Modal {% endcomment %}
+<div
+  id="mobile-filter-overlay"
+  class="fixed inset-0 z-30 hidden bg-white/70 bg-opacity-25 transition-opacity duration-300 ease-in-out"
+></div>
+
+{% schema %}
+{
+  "name": "Collection Page Content",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 12,
+      "label": "Products per page (initial load/batch size)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Page Content"
+    }
+  ]
+}
+{% endschema %}

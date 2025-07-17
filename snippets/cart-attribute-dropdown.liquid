@@ -1,0 +1,43 @@
+{% liquid
+  assign attribute_key = attribute_name | handleize
+  assign current_value = cart.attributes[attribute_name]
+  assign option_list = options | split: ','
+%}
+
+<div>
+  <label
+    for="CartAttribute--{{ attribute_key }}"
+    class="text-primary mb-1 block text-sm font-medium"
+  >
+    {{- label | escape -}}
+  </label>
+  <div class="relative">
+    <select
+      id="CartAttribute--{{ attribute_key }}"
+      name="attributes[{{ attribute_name | escape }}]"
+      class="focus:border-primary focus:ring-primary block w-full appearance-none rounded-md border-gray-300 pr-8 shadow-sm sm:text-sm"
+      required
+    >
+      <option
+        value=""
+        {% if current_value == blank %}
+          selected
+        {% endif %}
+        disabled
+      >
+        Please select before checking out
+      </option>
+      {% for option in option_list %}
+        {% assign option_value = option | strip %}
+        <option
+          value="{{ option_value | escape }}"
+          {% if current_value == option_value %}
+            selected
+          {% endif %}
+        >
+          {{ option_value | escape }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+</div>

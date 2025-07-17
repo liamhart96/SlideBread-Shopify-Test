@@ -1,0 +1,217 @@
+<section class="relative">
+  <div class="theme-container p-4">
+    {% if section.settings.title != blank %}
+      <div class="mb-8 text-center">
+        <h2 class="text-primary font-base text-2xl md:text-3xl">
+          {{ section.settings.title }}
+        </h2>
+        {% if section.settings.subtitle != blank %}
+          <p class="text-primary-light mt-2">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% assign block_count = section.blocks | size %}
+    {% assign desktop_cols = 4 %}
+
+    {% if block_count == 2 %}
+      {% assign desktop_cols = 2 %}
+    {% elsif block_count == 3 %}
+      {% assign desktop_cols = 3 %}
+    {% endif %}
+
+    {% assign gap_class = 'gap-8 md:gap-12' %}
+    {% if section.settings.gap_alignment != 'none' %}
+      {% assign gap_class = section.settings.gap_alignment %}
+    {% endif %}
+
+    {% if section.settings.is_corners_rounded %}
+      {% assign rounded_corners = 'rounded-lg' %}
+    {% endif %}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-{{ desktop_cols }} {{ gap_class }} mx-auto">
+      {% for block in section.blocks %}
+        {% if block.type == 'collection_link' %}
+          <div class="collection-link-card text-center" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.link }}" class="group block">
+              <div class="bg-tertiary mb-2 flex items-center justify-center overflow-hidden transition-transform duration-300 {{ rounded_corners }}">
+                {% if block.settings.image != blank %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 500 }}"
+                    alt="{{ block.settings.title }}"
+                    class="max-h-full w-full max-w-full object-contain"
+                    loading="lazy"
+                    width="500"
+                    height="500"
+                  >
+                {% else %}
+                  <span class="text-primary">{{ block.settings.title }}</span>
+                {% endif %}
+              </div>
+              <h3 class="font-heading text-primary text-xs font-bold uppercase tracking-widest md:text-base">
+                {{ block.settings.title }}
+              </h3>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_view_all and section.settings.view_all_link != blank %}
+      <div class="my-6 text-center">
+        <a href="{{ section.settings.view_all_link }}" class="btn {{ section.settings.btn_style }}">
+          {{ section.settings.view_all_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "tag": "section",
+  "class": "collection-grid-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "These are unbeleafable too"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "shop by collection"
+    },
+    {
+      "type": "header",
+      "content": "Spacing/ Settings"
+    },
+    {
+      "type": "select",
+      "id": "gap_alignment",
+      "label": "Gap alignment",
+      "info": "Amount of space between items",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "gap-4",
+          "label": "Small"
+        },
+        {
+          "value": "gap-8",
+          "label": "Medium"
+        },
+        {
+          "value": "gap-12",
+          "label": "Large"
+        }
+      ],
+      "default": "gap-8"
+    },
+    {
+      "type": "checkbox",
+      "id": "is_corners_rounded",
+      "label": "Rounded corners",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all button text",
+      "default": "View all collections"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all button link"
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "Button Style",
+      "options": [
+        {
+          "value": "btn-primary",
+          "label": "Primary Button"
+        },
+        {
+          "value": "btn-secondary",
+          "label": "Secondary Button"
+        },
+        {
+          "value": "btn-accent",
+          "label": "Accent Button"
+        },
+        {
+          "value": "btn-accent-outline",
+          "label": "Accent Outline"
+        }
+      ],
+      "default": "btn-primary"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_link",
+      "name": "Collection Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "FLOWERING PLANTS"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Grid",
+      "blocks": [
+        {
+          "type": "collection_link"
+        },
+        {
+          "type": "collection_link"
+        },
+        {
+          "type": "collection_link"
+        },
+        {
+          "type": "collection_link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,23 @@
+<div class="mt-6">
+  {% for block in section.blocks %}
+    {% if block.type == 'accordion_item' %}
+      <details
+        class="group overflow-hidden border-t border-gray-200 transition-all duration-300 ease-in-out"
+        {% if block.settings.open %}
+          open
+        {% endif %}
+        data-animated-details
+      >
+        <summary class="flex cursor-pointer items-center justify-between px-4 py-3 font-medium transition-colors duration-200 hover:bg-gray-50 focus:outline-none">
+          <span>{{ block.settings.title }}</span>
+          <span class="transform transition-transform duration-300 group-open:rotate-180">
+            {% render 'icons', icon: 'chevron' %}
+          </span>
+        </summary>
+        <div class="details-content prose px-4 py-3 transition-all duration-300 ease-in-out">
+          {{ block.settings.content }}
+        </div>
+      </details>
+    {% endif %}
+  {% endfor %}
+</div>

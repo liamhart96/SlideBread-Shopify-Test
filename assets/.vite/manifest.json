@@ -1,0 +1,66 @@
+{
+  "_CartService.DjU9-j2s.min.js": {
+    "file": "CartService.DjU9-j2s.min.js",
+    "name": "CartService",
+    "imports": [
+      "_bundle-mjs.DY7OEoBL.min.js"
+    ]
+  },
+  "_bundle-mjs.DY7OEoBL.min.js": {
+    "file": "bundle-mjs.DY7OEoBL.min.js",
+    "name": "bundle-mjs"
+  },
+  "_modulepreload-polyfill.B5Qt9EMX.min.js": {
+    "file": "modulepreload-polyfill.B5Qt9EMX.min.js",
+    "name": "modulepreload-polyfill"
+  },
+  "frontend/entrypoints/collection.ts": {
+    "file": "collection.BbGkfyDs.min.js",
+    "name": "collection",
+    "src": "frontend/entrypoints/collection.ts",
+    "isEntry": true,
+    "imports": [
+      "_modulepreload-polyfill.B5Qt9EMX.min.js",
+      "_bundle-mjs.DY7OEoBL.min.js"
+    ]
+  },
+  "frontend/entrypoints/colour-palette.ts": {
+    "file": "colour-palette.B8IxPwKg.min.js",
+    "name": "colour-palette",
+    "src": "frontend/entrypoints/colour-palette.ts",
+    "isEntry": true,
+    "imports": [
+      "_modulepreload-polyfill.B5Qt9EMX.min.js"
+    ]
+  },
+  "frontend/entrypoints/product.ts": {
+    "file": "product.DnbSwKdI.min.js",
+    "name": "product",
+    "src": "frontend/entrypoints/product.ts",
+    "isEntry": true,
+    "imports": [
+      "_modulepreload-polyfill.B5Qt9EMX.min.js",
+      "_CartService.DjU9-j2s.min.js",
+      "_bundle-mjs.DY7OEoBL.min.js"
+    ],
+    "css": [
+      "product.B6b2TY3a.min.css"
+    ]
+  },
+  "frontend/entrypoints/theme.css": {
+    "file": "theme.DdPR5NpV.min.css",
+    "src": "frontend/entrypoints/theme.css",
+    "isEntry": true
+  },
+  "frontend/entrypoints/theme.ts": {
+    "file": "theme.c1fLT4Si.min.js",
+    "name": "theme",
+    "src": "frontend/entrypoints/theme.ts",
+    "isEntry": true,
+    "imports": [
+      "_modulepreload-polyfill.B5Qt9EMX.min.js",
+      "_CartService.DjU9-j2s.min.js",
+      "_bundle-mjs.DY7OEoBL.min.js"
+    ]
+  }
+}

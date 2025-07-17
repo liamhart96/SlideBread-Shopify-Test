@@ -1,0 +1,184 @@
+<header-nav>
+  <div class="rounded-3xl bg-white mt-4 mx-4 shadow-[0_0_0_1px_#0000000f,0_1px_1px_-0.5px_#0000000f,0_3px_3px_-1.5px_#0000000f,0_6px_6px_-3px_#0000000f,0_12px_12px_-6px_#0000000f,0_24px_24px_-12px_#0000000f]">
+    <div class="theme-container px-4">
+      <div id="header-nav" class="flex items-center justify-between py-6 lg:py-6">
+        <!-- Mobile menu button - mobile only -->
+        <button
+          id="mobile-menu-button"
+          class="text-primary hover:text-accent transition-colors lg:hidden"
+          aria-label="Toggle menu"
+        >
+          {% render 'icons', icon: 'menu' %}
+        </button>
+
+        <!-- Logo (left) - desktop only -->
+        <div class="hidden lg:flex items-center">
+          <a href="/" class="block">
+            {%- if section.settings.logo != blank -%}
+              <a href="{{ routes.root_url }}" class="flex-shrink-0">
+                {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+                {{
+                  section.settings.logo
+                  | image_url: width: section.settings.logo_width
+                  | image_tag:
+                    class: 'h-8 w-auto',
+                    alt: logo_alt,
+                    width: section.settings.logo_width
+                }}
+              </a>
+            {%- else -%}
+              <a
+                href="{{ routes.root_url }}"
+                title="{{ shop.name }} Logo"
+                class="logo text-primary relative z-10 flex !max-w-[165px] items-center justify-start transition duration-300 ease-in-out lg:!max-w-[220px]"
+              >
+                {% render 'icons', icon: 'logo', class: 'w-64' %}
+              </a>
+            {%- endif -%}
+          </a>
+        </div>
+
+        <!-- Logo (center) - mobile only -->
+        <div class="flex justify-center lg:hidden">
+          <a href="/" class="block">
+            {%- if section.settings.logo != blank -%}
+              <a href="{{ routes.root_url }}" class="flex-shrink-0">
+                {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+                {{
+                  section.settings.logo
+                  | image_url: width: section.settings.logo_width
+                  | image_tag:
+                    class: 'h-8 w-auto',
+                    alt: logo_alt,
+                    width: section.settings.logo_width
+                }}
+              </a>
+            {%- else -%}
+              <a
+                href="{{ routes.root_url }}"
+                title="{{ shop.name }} Logo"
+                class="logo text-primary relative z-10 flex !max-w-[165px] items-center justify-start transition duration-300 ease-in-out lg:!max-w-[220px]"
+              >
+                {% render 'icons', icon: 'logo', class: 'w-64' %}
+              </a>
+            {%- endif -%}
+          </a>
+        </div>
+
+        <!-- Menu (center) - desktop only -->
+        <nav class="hidden lg:flex font-heading gap-6">
+          {%- render 'navigation',
+            menu: section.settings.menu,
+            align: 'center',
+            show_dropdown_menu: section.settings.show_dropdown_menu
+          -%}
+          {%- render 'navigation',
+            menu: section.settings.menu_right,
+            align: 'center',
+            show_dropdown_menu: section.settings.show_dropdown_menu
+          -%}
+        </nav>
+
+        <!-- Icons (right) -->
+        <div class="flex items-center gap-4 lg:gap-6">
+          <!-- Search icon -->
+          <a
+            href="/search"
+            class="text-primary hover:text-accent transition-colors"
+          >
+            <span class="sr-only">Search</span>
+            {% render 'icons', icon: 'search' %}
+          </a>
+
+          <!-- Wishlist icon -->
+          <a href="/pages/wishlist" class="text-primary hover:text-accent transition-colors">
+            <span class="sr-only">Wishlist</span>
+            {% render 'icons', icon: 'wishlist' %}
+          </a>
+
+          <!-- Account icon - desktop only -->
+          <a
+            href="/account"
+            class="text-primary hover:text-accent hidden transition-colors lg:block"
+          >
+            <span class="sr-only">Account</span>
+            {% render 'icons', icon: 'account' %}
+          </a>
+
+          <!-- Cart icon -->
+          <button
+            type="button"
+            id="cart-button"
+            class="text-primary hover:text-accent relative cursor-pointer transition-colors"
+          >
+            <span class="sr-only">Cart</span>
+            {% render 'icons', icon: 'cart' %}
+
+            <cart-counter
+              data-count="{{ cart.item_count }}"
+              class="absolute -right-2 -top-2 ml-1 h-4 w-4 rounded-full bg-gray-100  text-center text-xs {% if cart.item_count == 0 %}hidden{% endif %}"
+            >
+              {{ cart.item_count }}
+            </cart-counter>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header-nav>
+
+{% render 'header-nav-drawer' %}
+{% render 'header-cart-drawer' %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 140
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Left Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_right",
+      "label": "Right Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dropdown_menu",
+      "label": "Show dropdown menu",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,112 @@
+<section class="relative">
+  <div class="theme-container p-4">
+    <div class="mb-4 py-4 text-center">
+      <h1 class="mb-2 text-3xl font-medium">
+        {{ section.settings.page_title | default: page.title | escape }}
+      </h1>
+      <a
+        href="{{ section.settings.continue_shopping_url | default: routes.all_products_collection_url }}"
+        class="hover:text-primary text-sm underline"
+        >Continue shopping</a
+      >
+    </div>
+
+    {% comment %} Embed initial cart state for React component hydration {% endcomment %}
+    <script id="initial-cart-state" type="application/json">
+      {{ cart | json }}
+    </script>
+
+    <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
+      <div class="flex flex-col gap-8 lg:flex-row lg:gap-12">
+        {% comment %} Left Column - Cart Items {% endcomment %}
+        <div class="w-full lg:w-2/3">
+          {% comment %} Guarantee Banner {% endcomment %}
+          <div class="bg-tertiary mb-6 flex items-center space-x-2 rounded-md p-3">
+            {% render 'icons', icon: 'shield' %}
+            <p class="text-primary text-sm">
+              <b>Free 12 month plant guarantee on ALL orders</b> - we've got you covered!
+              <a href="#" class="font-medium underline">Learn more</a>
+            </p>
+          </div>
+
+          {% comment %} Cart Item List Custom Element {% endcomment %}
+          <cart-item-list class="block"></cart-item-list>
+        </div>
+
+        {% comment %} Right Column - Cart Summary & Actions {% endcomment %}
+        <div class="w-full lg:w-1/3">
+          <div class="space-y-6 rounded-md border border-gray-200 bg-gray-50 p-6">
+            {% render 'cart-delivery-date' %}
+
+            {% render 'cart-greeting-card' %}
+
+            {% render 'cart-attribute-dropdown',
+              label: 'Where did you hear about us?',
+              attribute_name: 'Source',
+              options: 'Website,Social Media,Friend/Family,Advertisement,Other'
+            %}
+
+            {% render 'cart-attribute-dropdown',
+              label: 'Are you purchasing for home or business?',
+              attribute_name: 'Purchase Type',
+              options: 'Home,Business'
+            %}
+
+            {% comment %} Subtotal {% endcomment %}
+            <div class="border-t border-gray-200 pt-6">
+              <div class="mb-2 flex items-center justify-between">
+                <p class="text-primary font-medium">Subtotal</p>
+                <p class="text-primary font-medium" data-cart-price>
+                  {{ cart.total_price | money }}
+                </p>
+              </div>
+              <p class="mb-4 text-xs text-gray-500">
+                VAT included. Delivery is calculated at checkout.
+              </p>
+
+              {% comment %} Checkout Button {% endcomment %}
+              <div>
+                <button
+                  type="submit"
+                  name="checkout"
+                  class="btn btn-secondary w-full"
+                  data-cart-checkout-button
+                  {% if cart.item_count == 0 %}
+                    disabled
+                  {% endif %}
+                >
+                  Check Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart Page",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Page Title",
+      "default": "Your Bag"
+    },
+    {
+      "type": "url",
+      "id": "continue_shopping_url",
+      "label": "'Continue Shopping' Link URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart Page"
+    }
+  ]
+}
+{% endschema %}

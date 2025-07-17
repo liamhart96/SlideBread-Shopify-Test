@@ -1,0 +1,103 @@
+<section class="py-12">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1 class="mb-8 text-3xl font-bold">{{ collection.title }}</h1>
+
+    {% if collection.description != blank %}
+      <div class="mb-8 text-gray-600">{{ collection.description }}</div>
+    {% endif %}
+
+    {% paginate collection.products by section.settings.products_per_page %}
+      <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        {% for product in collection.products %}
+          <div class="group relative" id="product-{{ product.id }}">
+            <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200">
+              {% if product.featured_image != blank %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 500 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="h-full w-full object-cover object-center"
+                  width="500"
+                  height="500"
+                >
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'h-full w-full object-cover object-center' }}
+              {% endif %}
+            </div>
+            <div class="mt-4 flex justify-between">
+              <div>
+                <h3 class="text-sm text-gray-700">
+                  <a href="{{ product.url }}">
+                    <span aria-hidden="true" class="absolute inset-0"></span>
+                    {{ product.title }}
+                  </a>
+                </h3>
+              </div>
+              <p class="text-sm font-medium text-gray-900">{{ product.price | money }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% comment %} Prepare initial products data as JSON {% endcomment %}
+      {% capture initial_products_json %}
+        [
+          {% for product in collection.products %}
+            {
+              "id": {{ product.id | json }},
+              "title": {{ product.title | json }},
+              "handle": {{ product.handle | json }},
+              "price": {{ product.price | money | json }},
+              "price_min": {{ product.price_min | json }},
+              "price_max": {{ product.price_max | json }},
+              "available": {{ product.available | json }},
+              "featured_image": {% if product.featured_image %}
+                {
+                  "src": {{ product.featured_image | image_url: width: 500 | json }},
+                  "alt": {{ product.featured_image.alt | json }}
+                }
+              {% else %}
+                null
+              {% endif %},
+              "url": {{ product.url | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      {% endcapture %}
+
+      <collection-infinite-scroll
+        data-collection-handle="{{ collection.handle }}"
+        data-current-page="1"
+        data-total-pages="{{ paginate.pages }}"
+        data-next-url="{% if paginate.next %}{{ paginate.next.url }}{% if paginate.next.url contains '?' %}&{% else %}?{% endif %}view=ajax{% endif %}"
+        data-initial-products="{{ initial_products_json | escape }}"
+        data-products-per-page="{{ section.settings.products_per_page }}"
+      >
+        <!-- Initial server-rendered content is above -->
+        <!-- Additional pages will be loaded here -->
+      </collection-infinite-scroll>
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12,
+      "label": "Products per page"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}

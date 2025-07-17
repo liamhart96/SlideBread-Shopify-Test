@@ -1,0 +1,41 @@
+# Theme Check configuration
+# See https://github.com/Shopify/theme-check/blob/main/docs/checks/index.md for available checks
+
+root: .
+
+MatchingTranslations:
+  enabled: false
+TemplateLength:
+  enabled: false
+RemoteAsset:
+  enabled: false
+AssetPreload:
+  enabled: true
+ContentForHeaderModification:
+  enabled: true
+ImgLazyLoading:
+  enabled: true
+ImgWidthAndHeight:
+  enabled: true
+LiquidHTMLAttributes:
+  enabled: true
+MissingTemplate:
+  enabled: true
+NestedSnippet:
+  enabled: true
+PaginationSize:
+  enabled: true
+ParserBlockingJavaScript:
+  enabled: true
+RequiredLayoutThemeObject:
+  enabled: true
+UnknownFilter:
+  enabled: true
+UnusedAssign:
+  enabled: true
+UnnecessaryDisable:
+  enabled: true
+ValidHTMLTranslation:
+  enabled: true
+ValidSchema:
+  enabled: true

@@ -1,0 +1,19 @@
+<div class="my-4">
+  {% if product.compare_at_price > product.price %}
+    <div class="flex items-center">
+      <span class="text-primary mr-2 line-through">
+        {{- product.compare_at_price | money_without_trailing_zeros -}}
+      </span>
+      <span class="text-2xl font-bold text-red-600" data-product-price>
+        {{- product.price | money -}}
+      </span>
+      <span class="ml-2 text-sm text-red-600"
+        >Save {{ product.compare_at_price | minus: product.price | money -}}
+      </span>
+    </div>
+  {% else %}
+    <span class="text-2xl font-bold" data-product-price>
+      {{- product.price | money_without_trailing_zeros -}}
+    </span>
+  {% endif %}
+</div>

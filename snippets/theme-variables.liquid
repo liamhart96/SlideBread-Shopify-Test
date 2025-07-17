@@ -1,0 +1,90 @@
+{%- comment -%}Theme container settings{%- endcomment -%}
+{%- liquid
+  assign container_width = settings.container_width | default: 1280
+  assign container_padding = settings.container_padding | default: 16
+-%}
+{%- assign base_font = settings.type_base_font_family -%}
+{%- assign base_font_bold = base_font | font_modify: 'weight', '600' -%}
+{%- assign base_font_italic = base_font | font_modify: 'style', 'italic' -%}
+{%- assign base_font_bold_italic = base_font_bold | font_modify: 'style', 'italic' -%}
+
+{%- style -%}
+  @font-face {
+    font-family: Gotham_Bold;
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url("{{ 'Gotham_Bold.woff2' | asset_url }}") format("woff2"),
+    src: url("{{ 'Gotham_Bold.woff' | asset_url }}") format("woff"),
+    src: url("{{ 'Gotham_Bold.ttf' | asset_url }}") format("ttf");
+  }
+
+  {{ base_font | font_face: font_display: 'block' }}
+  {{ base_font_bold | font_face: font_display: 'swap' }}
+  {{ base_font_italic | font_face: font_display: 'swap' }}
+  {{ base_font_bold_italic | font_face: font_display: 'optional' }}
+{%- endstyle -%}
+
+{% style %}
+  #shopify-pc__banner { display: none !important; }
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+  {{ body_font_bold | font_face: font_display: 'swap' }}
+  {{ body_font_italic | font_face: font_display: 'swap' }}
+  {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+  {{ settings.type_header_font | font_face: font_display: 'swap' }}
+
+  :root {
+    /* Container Variables */
+    --container-width: {{ container_width }}px;
+    --container-padding: {{ container_padding }}px;
+
+    /* Typography Variables */
+    --font-heading-serif-family: Gotham_Bold, {{ settings.type_header_font.fallback_families }};
+    --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+    --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+
+    /* Color Variables */
+    --color-primary-light: {{ settings.colors_primary_light }};
+    --color-primary: {{ settings.colors_primary }};
+    --color-primary-dark: {{ settings.colors_primary_dark }};
+
+    --color-accent-light: {{ settings.colors_accent_light }};
+    --color-accent: {{ settings.colors_accent }};
+    --color-accent-dark: {{ settings.colors_accent_dark }};
+
+    --color-secondary-light: {{ settings.colors_secondary_light }};
+    --color-secondary: {{ settings.colors_secondary }};
+    --color-secondary-dark: {{ settings.colors_secondary_dark }};
+
+    --color-tertiary-light: {{ settings.colors_tertiary_light }};
+    --color-tertiary: {{ settings.colors_tertiary }};
+    --color-tertiary-dark: {{ settings.colors_tertiary_dark }};
+
+    /* Size Variables */
+    --font-size-fine: 0.75rem; /* text-xs */
+    --font-size-copy: 1rem; /* text-base */
+    --font-size-lead: 1.125rem; /* text-lg */
+    --font-size-heading: 2rem; /* text-2xl */
+    --font-size-display: 3rem; /* text-4xl */
+    --height-nav: 3rem;
+    --screen-height: 100vh;
+  }
+
+  @media (min-width: 32em) {
+    :root {
+      --height-nav: 4rem;
+    }
+  }
+  @media (min-width: 48em) {
+    :root {
+      --height-nav: 6rem;
+      --font-size-heading: 2.25rem; /* text-4xl */
+      --font-size-display: 3.75rem; /* text-6xl */
+    }
+  }
+  @supports (height: 100lvh) {
+    :root {
+      --screen-height: 100lvh;
+    }
+  }
+{% endstyle %}

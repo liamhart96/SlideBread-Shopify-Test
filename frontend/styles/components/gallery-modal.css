@@ -1,0 +1,83 @@
+.gallery-modal[open],
+.gallery-modal::backdrop {
+  animation: show 500ms ease;
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+}
+
+.gallery-modal {
+  @apply max-w-screen m-0 max-h-screen rounded-none border-none bg-transparent p-0 transition-all duration-300 ease-in-out;
+  animation: show 500ms ease;
+}
+
+.gallery-modal::backdrop {
+  @apply bg-white/90;
+}
+
+.gallery-modal-content {
+  @apply pointer-events-none relative flex h-screen w-screen items-center justify-center;
+}
+
+.gallery-modal-close {
+  @apply text-primary pointer-events-auto absolute bottom-4 z-10 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-none bg-white/90 p-2 text-center transition-colors duration-200;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.gallery-modal-close:hover {
+  @apply bg-white/70;
+}
+
+.gallery-modal-carousel {
+  @apply pointer-events-auto relative flex h-full w-full items-center justify-center;
+}
+
+.gallery-modal-carousel .carousel-cell {
+  @apply flex h-[100vh] w-full items-center justify-center;
+}
+
+.gallery-modal-carousel img {
+  @apply object-contain;
+}
+
+/* Flickity custom styles */
+.gallery-modal-carousel .flickity-viewport {
+  @apply h-[100vh] w-full;
+}
+
+.gallery-modal-carousel .flickity-slider {
+  @apply flex items-center justify-center;
+}
+
+.gallery-modal-carousel .flickity-button {
+  @apply absolute bottom-1 top-auto h-11 w-11 rounded-full bg-white/90;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.gallery-modal-carousel .flickity-button.previous {
+  left: unset;
+  @apply mr-32;
+}
+
+.gallery-modal-carousel .flickity-button.next {
+  right: unset;
+  @apply ml-32;
+}
+
+.gallery-modal-carousel .flickity-button:hover {
+  @apply bg-white/70;
+}
+
+.gallery-modal-carousel .flickity-button-icon {
+}
+
+.gallery-zoom-button:focus {
+  @apply outline-none;
+}
+
+.gallery-zoom-button:focus-visible {
+  @apply outline-2 outline-offset-2 outline-current;
+}

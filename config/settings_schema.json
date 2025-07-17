@@ -1,0 +1,242 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Unified Shopify Theme",
+    "theme_version": "0.0.0",
+    "theme_author": "THEME_AUTHOR",
+    "theme_documentation_url": "https://THEME_DOCUMENTATION_URL.com/",
+    "theme_support_url": "https://THEME_SUPPORT_URL.com/"
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "container_width",
+        "min": 1024,
+        "max": 1536,
+        "step": 16,
+        "unit": "px",
+        "label": "Container Width",
+        "default": 1440
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "colors_primary_light",
+        "default": "#4f6972",
+        "label": "Primary Light",
+        "info": "Hover states for primary elements"
+      },
+      {
+        "type": "color",
+        "id": "colors_primary",
+        "default": "#314b54",
+        "label": "Primary",
+        "info": "Headings, text, etc."
+      },
+      {
+        "type": "color",
+        "id": "colors_primary_dark",
+        "default": "#132d36",
+        "label": "Primary Dark",
+        "info": "Active/pressed states for primary elements"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent_light",
+        "default": "#ffa98b",
+        "label": "Accent Light",
+        "info": "Hover states for accent elements"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent",
+        "default": "#f18b6d",
+        "label": "Accent",
+        "info": "Backgrounds, borders, etc."
+      },
+      {
+        "type": "color",
+        "id": "colors_accent_dark",
+        "default": "#d36d4f",
+        "label": "Accent Dark",
+        "info": "Active/pressed states for accent elements"
+      },
+      {
+        "type": "color",
+        "id": "colors_secondary_light",
+        "default": "#2e5d4a",
+        "label": "Secondary Light",
+        "info": "Hover states for secondary elements"
+      },
+      {
+        "type": "color",
+        "id": "colors_secondary",
+        "default": "#103f2c",
+        "label": "Secondary",
+        "info": "Secondary backgrounds, borders, etc."
+      },
+      {
+        "type": "color",
+        "id": "colors_secondary_dark",
+        "default": "#00210e",
+        "label": "Secondary Dark",
+        "info": "Active/pressed states for secondary elements"
+      },
+      {
+        "type": "color",
+        "id": "colors_tertiary_light",
+        "default": "#fff7e4",
+        "label": "Tertiary Light",
+        "info": "Hover states for tertiary elements"
+      },
+      {
+        "type": "color",
+        "id": "colors_tertiary",
+        "default": "#f3d9c6",
+        "label": "Tertiary",
+        "info": "Light backgrounds"
+      },
+      {
+        "type": "color",
+        "id": "colors_tertiary_dark",
+        "default": "#d5bba8",
+        "label": "Tertiary Dark",
+        "info": "Active/pressed states for tertiary elements"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "helvetica_n7",
+        "label": "Font",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/manual/online-store/os/store-speed/improving-speed#fonts)"
+      },
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "helvetica_n4",
+        "label": "Font",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/manual/online-store/os/store-speed/improving-speed#fonts)"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "drawer",
+        "label": "Cart type"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_note",
+        "label": "Enable cart note",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Will be scaled down to 32 x 32px"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social accounts"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter",
+        "info": "https://twitter.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "info": "https://facebook.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "info": "https://pinterest.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "http://instagram.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "info": "https://tiktok.com/@shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr",
+        "info": "https://shopify.tumblr.com"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat",
+        "info": "https://www.snapchat.com/add/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube",
+        "info": "https://www.youtube.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo",
+        "info": "https://vimeo.com/shopify"
+      }
+    ]
+  }
+]

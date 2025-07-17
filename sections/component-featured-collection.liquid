@@ -1,0 +1,228 @@
+<section class="relative">
+  <div class="theme-container p-4">
+    {% if section.settings.title != blank %}
+      <div class="mb-8 text-center">
+        <h2 class="text-primary font-base text-2xl md:text-3xl">
+          {{ section.settings.title }}
+        </h2>
+        {% if section.settings.subtitle != blank %}
+          <p class="text-primary-light mt-2">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% assign block_count = section.blocks | size %}
+    {% assign desktop_cols = 4 %}
+
+    {% if block_count == 2 %}
+      {% assign desktop_cols = 2 %}
+    {% elsif block_count == 3 %}
+      {% assign desktop_cols = 3 %}
+    {% endif %}
+
+    {% if section.settings.is_corners_rounded %}
+      {% assign rounded_corners = 'rounded-lg' %}
+    {% endif %}
+
+    {% assign gap_class = 'gap-4 md:gap-6' %}
+    {% if section.settings.gap_alignment != 'none' %}
+      {% assign gap_class = section.settings.gap_alignment %}
+    {% endif %}
+
+    <div class="grid grid-cols-2 lg:grid-cols-{{ desktop_cols }} {{ gap_class }} ">
+      {% for block in section.blocks %}
+        {% if block.type == 'collection' %}
+          <div
+            class="collection-card group relative"
+            {{ block.shopify_attributes }}
+          >
+            {% if section.settings.text_position == 'inside' %}
+              <!-- Text inside image (original style) -->
+              <a
+                href="{{ block.settings.collection.url }}"
+                class="block aspect-square {{ rounded_corners }} overflow-hidden"
+              >
+                {% if block.settings.collection.image != blank %}
+                  <img
+                    src="{{ block.settings.collection.image | image_url: width: 600 }}"
+                    alt="{{ block.settings.collection.title }}"
+                    class="h-full w-full object-cover transition-transform duration-500  "
+                    loading="lazy"
+                    width="600"
+                    height="600"
+                  >
+                {% else %}
+                  <div class="bg-tertiary flex h-full w-full items-center justify-center">
+                    <span class="text-primary">{{ block.settings.collection.title }}</span>
+                  </div>
+                {% endif %}
+
+                <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-4 {{ rounded_corners }} overflow-hidden">
+                  <div class="text-white">
+                    <h3 class="text-lg font-bold md:text-xl">
+                      {{ block.settings.title | default: block.settings.collection.title }}
+                    </h3>
+                    {% if block.settings.show_product_count %}
+                      <p class="text-sm opacity-80">
+                        {{ block.settings.collection.products_count }} products
+                      </p>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            {% else %}
+              <!-- Text outside image (new style) -->
+              <div class="flex flex-col ">
+                <a
+                  href="{{ block.settings.collection.url }}"
+                  class="block aspect-square {{ rounded_corners }} overflow-hidden"
+                >
+                  {% if block.settings.collection.image != blank %}
+                    <img
+                      src="{{ block.settings.collection.image | image_url: width: 600 }}"
+                      alt="{{ block.settings.collection.title }}"
+                      class="h-full w-full object-cover transition-transform duration-500 "
+                      loading="lazy"
+                      width="600"
+                      height="600"
+                    >
+                  {% else %}
+                    <div class="bg-tertiary flex h-full w-full items-center justify-center">
+                      <span class="text-primary">{{ block.settings.collection.title }}</span>
+                    </div>
+                  {% endif %}
+                </a>
+                <div class="mt-2 text-center">
+                  <h3 class="font-heading text-primary text-xs font-bold uppercase tracking-widest md:text-base">
+                    {{ block.settings.title | default: block.settings.collection.title }}
+                  </h3>
+                  {% if block.settings.show_product_count %}
+                    <p class="text-primary-light text-sm">
+                      {{ block.settings.collection.products_count }} products
+                    </p>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "tag": "section",
+  "class": "featured-collections-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "even more gifts to choose from"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Find the perfect plant gift"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        {
+          "value": "inside",
+          "label": "Text inside image"
+        },
+        {
+          "value": "outside",
+          "label": "Text outside image"
+        }
+      ],
+      "default": "inside"
+    },
+    {
+      "type": "select",
+      "id": "gap_alignment",
+      "label": "Gap alignment",
+      "info": "Amount of space between image/content",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "gap-4",
+          "label": "Gap 4"
+        },
+        {
+          "value": "gap-8",
+          "label": "Gap 8"
+        },
+        {
+          "value": "gap-12",
+          "label": "Gap 12"
+        },
+        {
+          "value": "gap-24",
+          "label": "Gap 24"
+        }
+      ],
+      "default": "gap-4"
+    },
+    {
+      "type": "checkbox",
+      "id": "is_corners_rounded",
+      "label": "Rounded corners",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom title (optional)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_product_count",
+          "label": "Show product count",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

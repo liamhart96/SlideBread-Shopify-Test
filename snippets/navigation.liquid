@@ -1,0 +1,64 @@
+<ul class="relative flex flex-wrap items-center justify-{{ align }} gap-x-8 gap-y-2">
+  {% for link in linklists[menu].links %}
+    <li class="group relative">
+      <a
+        href="{{ link.url }}"
+        data-menu-link
+        data-menu-level="1"
+        class="font-heading text-primary focus:text-accent font-base relative block text-xs font-bold uppercase transition-colors duration-200 after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:scale-x-0 after:transform after:bg-current after:transition-transform after:duration-200 after:content-[''] hover:after:scale-x-100 focus:outline-none"
+      >
+        {{ link.title }}
+      </a>
+
+      {% if link.links != blank %}
+        <!-- Submenu -->
+        <div class="invisible absolute left-0 top-full z-50 mt-1 origin-top-left transform opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 {% if show_dropdown_menu %}block{% else %}hidden{% endif %}">
+          <ul class="w-56 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+            {% for childlink in link.links %}
+              <li class="group/child relative">
+                <a
+                  href="{{ childlink.url }}"
+                  data-menu-link
+                  data-menu-level="2"
+                  class="font-heading hover:text-accent text-primary flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-50"
+                >
+                  <span>{{ childlink.title }}</span>
+                  {% if childlink.links != blank %}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  {% endif %}
+                </a>
+
+                {% if childlink.links != blank %}
+                  <!-- Sub-submenu -->
+                  <div class="invisible absolute left-full top-0 z-50 ml-1 origin-top-left transform opacity-0 transition-all duration-200 group-hover/child:visible group-hover/child:opacity-100">
+                    <ul class="w-56 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+                      {% for grandchildlink in childlink.links %}
+                        <li>
+                          <a
+                            href="{{ grandchildlink.url }}"
+                            data-menu-link
+                            data-menu-level="3"
+                            class="font-heading hover:text-accent text-primary block px-4 py-2 text-sm hover:bg-gray-50"
+                          >
+                            {{ grandchildlink.title }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,97 @@
+/* ==========================================================================
+    BUTTON STYLING
+========================================================================== */
+.btn {
+  @apply font-heading inline-flex cursor-pointer items-center justify-center gap-2 rounded border border-transparent px-8 py-4 text-sm font-bold uppercase leading-none tracking-wider transition duration-300 ease-in-out md:text-base;
+}
+
+.btn svg {
+  @apply h-4 w-4;
+}
+
+.btn-lg svg {
+  @apply h-4 w-4;
+}
+
+/* Accent Button */
+.btn-accent {
+  @apply bg-accent text-white;
+}
+.btn-accent:hover {
+  @apply bg-accent-light;
+}
+.btn-accent:active {
+  @apply bg-accent-dark;
+}
+
+/* Accent Outline Button */
+.btn-accent-outline {
+  @apply text-accent border-accent border-2;
+}
+.btn-accent-outline:hover {
+  @apply border-accent-light text-accent-light;
+}
+.btn-accent-outline:active {
+  @apply border-accent-dark text-accent-dark;
+}
+
+/* Primary Button */
+.btn-primary {
+  @apply bg-primary text-white;
+}
+.btn-primary:hover {
+  @apply bg-primary-light;
+}
+.btn-primary:active {
+  @apply bg-primary-dark;
+}
+
+/* Primary Outline Button */
+.btn-primary-outline {
+  @apply text-primary border-primary border-2;
+}
+.btn-primary-outline:hover {
+  @apply border-primary-light text-primary-light;
+}
+.btn-primary-outline:active {
+  @apply border-primary-dark text-primary-dark;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  @apply bg-secondary text-white;
+}
+.btn-secondary:hover {
+  @apply bg-secondary-light;
+}
+.btn-secondary:active {
+  @apply bg-secondary-dark;
+}
+
+/* Secondary Outline Button */
+.btn-secondary-outline {
+  @apply text-secondary border-secondary border-2;
+}
+.btn-secondary-outline:hover {
+  @apply border-secondary-light text-secondary-light;
+}
+.btn-secondary-outline:active {
+  @apply border-secondary-dark text-secondary-dark;
+}
+
+/* Link Button */
+.btn-link {
+  @apply hover:underline;
+}
+.btn-link:hover {
+  @apply text-primary-light;
+}
+.btn-link:active {
+  @apply text-primary-dark;
+}
+
+/* Disabled Button */
+.btn-disabled,
+.btn[disabled] {
+  @apply cursor-not-allowed opacity-50;
+}

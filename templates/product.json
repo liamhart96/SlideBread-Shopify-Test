@@ -1,0 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "component-rte",
+      "settings": {}
+    },
+    "component_product_4A7aFn": {
+      "type": "component-product",
+      "blocks": {
+        "product_attributes_rWnN63": {
+          "type": "product_attributes",
+          "settings": {}
+        },
+        "product_price_XrcEnE": {
+          "type": "product_price",
+          "settings": {}
+        },
+        "variant_picker_mtQjcP": {
+          "type": "variant_picker",
+          "settings": {}
+        },
+        "buy_buttons_brTMYq": {
+          "type": "buy_buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "product_attributes_rWnN63",
+        "product_price_XrcEnE",
+        "variant_picker_mtQjcP",
+        "buy_buttons_brTMYq"
+      ],
+      "settings": {}
+    },
+    "component_featured_products_JkDwMp": {
+      "type": "component-featured-products",
+      "settings": {
+        "title": "You may also like",
+        "subtitle": "",
+        "collection": "air-purifying",
+        "products_to_show": 4,
+        "is_corners_rounded": false,
+        "show_view_all": false,
+        "view_all_text": "View all collections",
+        "btn_style": "btn-primary"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "component_product_4A7aFn",
+    "component_featured_products_JkDwMp"
+  ]
+}

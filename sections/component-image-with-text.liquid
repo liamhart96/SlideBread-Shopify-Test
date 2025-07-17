@@ -1,0 +1,151 @@
+<section class="relative">
+  <div class="theme-container p-4">
+    <div class="flex flex-col items-center gap-8 md:flex-row md:gap-12 lg:gap-16">
+      {% if section.settings.is_corners_rounded %}
+        {% assign rounded_corners = 'rounded-lg' %}
+      {% endif %}
+
+      <!-- Image Column -->
+      <div class="w-full md:w-1/2">
+        {% if section.settings.image != blank %}
+          <div class="relative overflow-hidden {{ rounded_corners }}">
+            <img
+              src="{{ section.settings.image | image_url: width: 800 }}"
+              alt="{{ section.settings.heading | escape }}"
+              class="h-auto w-full object-cover"
+              width="800"
+              height="600"
+              loading="lazy"
+            >
+          </div>
+        {% else %}
+          <div class="flex aspect-[4/3] items-center justify-center rounded-lg bg-gray-200">
+            <span class="text-gray-500">{{ 'image' | placeholder_svg_tag: 'w-full h-64' }}</span>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Content Column -->
+      <div class="flex w-full flex-col md:w-1/2">
+        {% if section.settings.heading != blank %}
+          <h2 class="text-primary font-base mb-4 text-2xl md:text-3xl lg:text-4xl">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <div class="text-primary-light mb-6 lg:max-w-[400px]">
+            {{ section.settings.text }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <div class="mt-2">
+            <a
+              href="{{ section.settings.button_link }}"
+              class="btn {{ section.settings.btn_style }}"
+            >
+              {{ section.settings.button_label }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image With Text",
+  "tag": "section",
+  "class": "image-with-text-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "is_corners_rounded",
+      "label": "Rounded corners",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "plants for businesses"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We make corporate gifting and commercial installations quick and easy. Speak to our dedicated business team today.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "MORE INFO"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "Button Style",
+      "options": [
+        {
+          "value": "btn-primary",
+          "label": "Primary Button"
+        },
+        {
+          "value": "btn-secondary",
+          "label": "Secondary Button"
+        },
+        {
+          "value": "btn-accent",
+          "label": "Accent Button"
+        },
+        {
+          "value": "btn-accent-outline",
+          "label": "Accent Outline"
+        }
+      ],
+      "default": "btn-primary"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image With Text",
+      "settings": {
+        "heading": "plants for businesses",
+        "text": "<p>We make corporate gifting and commercial installations quick and easy. Speak to our dedicated business team today.</p>",
+        "button_label": "MORE INFO"
+      }
+    }
+  ]
+}
+{% endschema %}

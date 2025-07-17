@@ -1,0 +1,72 @@
+<div class="product-gallery flex gap-4">
+  <!-- Vertical thumbnails on the left -->
+  <div class="hidden w-1/12 min-w-[90px] md:block">
+    <div class="product-gallery-carousel product-gallery-carousel-nav">
+      {% for image in product.images %}
+        <div class="carousel-cell overflow-hidden rounded-lg">
+          <img
+            src="{{ image | img_url: 'small' }}"
+            alt="{{ image.alt | escape }}"
+            width="{{ image.width }}"
+            height="{{ image.height }}"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          >
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Main carousel container -->
+  <div class="w-full md:w-11/12">
+    <div class="product-gallery-carousel product-gallery-carousel-main relative flex-1">
+      {% for image in product.images %}
+        <div class="carousel-cell group relative w-full overflow-hidden md:rounded-lg">
+          <img
+            src="{{ image | img_url: 'large' }}"
+            alt="{{ image.alt | escape }}"
+            width="{{ image.width }}"
+            height="{{ image.height }}"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          >
+          <button
+            class="gallery-zoom-button absolute bottom-16 right-4 flex cursor-pointer items-center justify-center rounded-full bg-white/50 p-2 transition-colors duration-200 hover:bg-white/70"
+            aria-label="Enlarge image"
+          >
+            {% render 'icons' with icon: 'search', class: 'w-5 h-5 text-primary' %}
+          </button>
+          <button
+            class="absolute bottom-4 right-4 flex cursor-pointer items-center justify-center rounded-full bg-white/50 p-2 transition-colors duration-200 hover:bg-white/70"
+            aria-label="Enlarge image"
+          >
+            {% render 'icons' with icon: 'heart', class: 'w-5 h-5 text-red-300' %}
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Gallery Modal -->
+<dialog id="gallery-modal" class="gallery-modal">
+  <div class="gallery-modal-content">
+    <button class="gallery-modal-close">
+      {% render 'icons' with icon: 'close' %}
+    </button>
+    <div class="gallery-modal-carousel">
+      {% for image in product.images %}
+        <div class="carousel-cell">
+          <img
+            src="{{ image | img_url: '2048x' }}"
+            alt="{{ image.alt | escape }}"
+            width="{{ image.width }}"
+            height="{{ image.height }}"
+            class="h-full w-full object-contain"
+            loading="lazy"
+          >
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</dialog>

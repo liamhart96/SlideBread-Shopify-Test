@@ -1,0 +1,153 @@
+<section class="bg-tertiary relative my-4">
+  <div class="theme-container p-4">
+    {% if section.settings.title != blank %}
+      <div class="mb-10 text-center">
+        <h2 class="text-primary font-base text-2xl md:text-3xl">
+          {{ section.settings.title }}
+        </h2>
+        {% if section.settings.subtitle != blank %}
+          <p class="text-primary-light mt-2">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="relative">
+      <!-- Desktop view: normal grid -->
+      <div class="mx-auto hidden gap-8 md:grid md:grid-cols-3">
+        {% for block in section.blocks %}
+          {% if block.type == 'feature' %}
+            <div class="px-4 text-center" {{ block.shopify_attributes }}>
+              {% if block.settings.icon != blank %}
+                <div class="mb-6 flex justify-center">
+                  <img
+                    src="{{ block.settings.icon | image_url: width: 100 }}"
+                    alt="{{ block.settings.title }}"
+                    class="h-24 w-auto"
+                    loading="lazy"
+                    width="100"
+                    height="100"
+                  >
+                </div>
+              {% endif %}
+
+              <h3 class="text-primary font-base mb-3 text-lg md:text-xl">
+                {{ block.settings.title }}
+              </h3>
+              <p class="text-primary-light">{{ block.settings.text }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Mobile view: horizontal scroll showing 1.5 items -->
+      <div class="custom-scrollbar scroll-snap-container mx-4 overflow-x-auto px-4 md:hidden">
+        <div class="scroll-snap-x inline-flex space-x-4 pb-6">
+          {% for block in section.blocks %}
+            {% if block.type == 'feature' %}
+              <div
+                class="scroll-snap-center w-[58vw] flex-shrink-0 text-center"
+                {{ block.shopify_attributes }}
+              >
+                {% if block.settings.icon != blank %}
+                  <div class="mb-6 flex justify-center">
+                    <img
+                      src="{{ block.settings.icon | image_url: width: 80 }}"
+                      alt="{{ block.settings.title }}"
+                      class="h-16 w-auto"
+                      loading="lazy"
+                      width="80"
+                      height="80"
+                    >
+                  </div>
+                {% endif %}
+
+                <h3 class="text-primary mb-3 text-lg font-medium">{{ block.settings.title }}</h3>
+                <p class="text-primary-light text-sm">{{ block.settings.text }}</p>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Why Choose Us",
+  "tag": "section",
+  "class": "why-choose-us-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "why us?"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f9e6dd"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Share information about this feature to highlight its value to your customers."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Choose Us",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "the plant & flower folk",
+            "text": "We're proud of our talented team of plant folk working from our nursery, dedicating time to caring for your plants - ensuring they arrive fresh & healthy."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "happiness guarantee",
+            "text": "Nothing makes us happier than making you happy! Which is why if your order arrives looking far from fresh, we'll replace it for you, for free, within 30 days."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "sustainability first",
+            "text": "Just like you, we're on a journey to protect our planet! We're proud that 100% of our packaging is sustainable, and we continue to make changes to how we work."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

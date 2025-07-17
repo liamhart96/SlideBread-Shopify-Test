@@ -1,0 +1,47 @@
+<!doctype html>
+<html class="h-full" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
+      >
+    {%- endif -%}
+
+    <title>{{ shop.name }}</title>
+
+    <meta name="description" content="">
+
+    {% render 'theme-variables' %}
+
+    {%- liquid
+      render 'vite' with 'theme.css', preload_stylesheet: true
+      render 'vite' with 'theme.ts'
+    -%}
+
+    {% if template == 'product' %}
+      {% render 'vite' with 'product.ts' %}
+    {% endif %}
+
+    {% if template == 'collection' %}
+      {% render 'vite' with 'collection.ts' %}
+    {% endif %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="">
+    <main>
+      {% section 'component-header' %}
+      {{ content_for_layout }}
+      {% section 'component-footer' %}
+    </main>
+  </body>
+</html>

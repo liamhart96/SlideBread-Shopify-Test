@@ -1,0 +1,60 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "container_width": 1440,
+    "colors_primary_light": "#222526",
+    "colors_primary": "#000000",
+    "colors_secondary": "#103f2c",
+    "type_header_font": "montserrat_n4",
+    "type_body_font": "lato_n4",
+    "social_facebook_link": "https://www.facebook.com/test",
+    "social_instagram_link": "https://www.instagram.com/test",
+    "social_tiktok_link": "https://www.tiktok.com/@test",
+    "load_custom_font": false,
+    "container_padding": 16,
+    "colors_contrast": "#f18b6d",
+    "sections": {
+      "component-header": {
+        "type": "component-header",
+        "settings": {
+          "logo_width": 100,
+          "menu": "main-menu",
+          "menu_right": "",
+          "sticky_header": true,
+          "show_dropdown_menu": false
+        }
+      },
+      "component-collection": {
+        "type": "component-collection",
+        "settings": {
+          "products_per_page": 12
+        }
+      },
+      "component-footer": {
+        "type": "component-footer",
+        "settings": {
+          "help_heading": "HELP",
+          "help_menu": "main-menu",
+          "newsletter_heading": "PLANT PARENTHOOD",
+          "newsletter_text": "Sign up for top tips, exclusive discounts and ongoing advice on how to care for your plants.",
+          "newsletter_placeholder": "Enter your email",
+          "newsletter_button_label": "Subscribe",
+          "newsletter_success_text": "Thanks for subscribing!",
+          "show_social_icons": true
+        }
+      }
+    },
+    "content_for_index": []
+  },
+  "presets": {
+    "Default": {}
+  }
+}

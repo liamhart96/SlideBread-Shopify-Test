@@ -1,0 +1,215 @@
+{% assign variants_array = '' %}
+{% for variant in product.variants %}
+  {% assign variant_json = '{"id":' | append: variant.id %}
+  {% assign variant_json = variant_json | append: ',"title":"' | append: variant.title | append: '"' %}
+  {% assign variant_json = variant_json | append: ',"available":' | append: variant.available %}
+  {% assign variant_json = variant_json | append: ',"options":[' %}
+  
+  {% for option in variant.options %}
+    {% assign variant_json = variant_json | append: '"' | append: option | append: '"' %}
+    {% unless forloop.last %}{% assign variant_json = variant_json | append: ',' %}{% endunless %}
+  {% endfor %}
+  
+  {% assign variant_json = variant_json | append: '],"price":"' | append: variant.price | append: '"' %}
+  
+  {% if variant.featured_image %}
+    {% assign variant_json = variant_json | append: ',"featured_image":{"src":"' | append: variant.featured_image | append: '","alt":"' | append: variant.featured_image.alt | append: '"}' %}
+  {% else %}
+    {% assign variant_json = variant_json | append: ',"featured_image":null' %}
+  {% endif %}
+  
+  {% comment %} Build images array based on alt text matching with improved fallback logic {% endcomment %}
+  {% assign variant_images = '' %}
+  {% assign variant_specific_images = '' %}
+  {% assign general_images = '' %}
+  {% assign images_found = false %}
+  
+  {% comment %} First pass: collect variant-specific images {% endcomment %}
+  {% for image in product.images %}
+    {% assign image_alt_lower = image.alt | downcase %}
+    {% assign image_filename_lower = image | downcase %}
+    {% assign is_variant_specific = false %}
+    
+    {% comment %} Check if image alt text OR filename contains any of this variant's option values {% endcomment %}
+    {% for option in variant.options %}
+      {% assign option_lower = option | downcase %}
+      {% if image_alt_lower contains option_lower or image_filename_lower contains option_lower %}
+        {% assign is_variant_specific = true %}
+        {% assign images_found = true %}
+        {% if image_alt_lower contains option_lower %}
+        {% else %}
+        {% endif %}
+        {% if variant_specific_images != '' %}
+          {% assign variant_specific_images = variant_specific_images | append: ',' %}
+        {% endif %}
+        {% assign image_url = image | image_url %}
+        {% assign variant_specific_images = variant_specific_images | append: '"' | append: image_url | append: '"' %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    
+    {% comment %} If not variant-specific, check if it's a general product image {% endcomment %}
+    {% if is_variant_specific == false %}
+      {% assign has_any_color = false %}
+      {% for product_option in product.options_with_values %}
+        {% assign option_name_lower = product_option.name | downcase %}
+        {% if option_name_lower contains 'color' or option_name_lower contains 'colour' %}
+          {% for value in product_option.values %}
+            {% assign value_lower = value | downcase %}
+            {% if image_alt_lower contains value_lower or image_filename_lower contains value_lower %}
+              {% assign has_any_color = true %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if has_any_color %}{% break %}{% endif %}
+      {% endfor %}
+      
+      {% comment %} If no color mentioned, it's a general image {% endcomment %}
+      {% if has_any_color == false %}
+        {% if general_images != '' %}
+          {% assign general_images = general_images | append: ',' %}
+        {% endif %}
+        {% assign image_url = image | image_url %}
+        {% assign general_images = general_images | append: '"' | append: image_url | append: '"' %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  
+  {% comment %} Use variant-specific images if found, otherwise use general images {% endcomment %}
+  {% if images_found and variant_specific_images != '' %}
+    {% assign variant_images = variant_specific_images %}
+  {% elsif general_images != '' %}
+    {% assign variant_images = general_images %}
+  {% else %}
+    {% comment %} Fallback: use all product images if no specific logic works {% endcomment %}
+    {% for image in product.images %}
+      {% if variant_images != '' %}
+        {% assign variant_images = variant_images | append: ',' %}
+      {% endif %}
+      {% assign image_url = image | image_url %}
+      {% assign variant_images = variant_images | append: '"' | append: image_url | append: '"' %}
+    {% endfor %}
+  {% endif %}
+  
+  {% assign variant_json = variant_json | append: ',"images":[' | append: variant_images | append: ']}' %}
+  
+  {% assign variants_array = variants_array | append: variant_json %}
+  {% unless forloop.last %}{% assign variants_array = variants_array | append: ',' %}{% endunless %}
+{% endfor %}
+
+{% assign variants_json = '[' | append: variants_array | append: ']' %}
+
+{% comment %} Build options with generic color config {% endcomment %}
+{% assign options_array = '' %}
+
+{% comment %} Parse generic color metafields {% endcomment %}
+{% assign color_hex_values = product.metafields.custom.color_hex_values %}
+{% assign color_display_names = product.metafields.custom.color_display_names %}
+{% assign color_swatch_images = product.metafields.custom.color_swatch_images %}
+
+{% for option in product.options_with_values %}
+  {% assign option_json = '{"name":"' | append: option.name | append: '","values":[' %}
+  
+  {% for value in option.values %}
+    {% assign option_json = option_json | append: '"' | append: value | append: '"' %}
+    {% unless forloop.last %}{% assign option_json = option_json | append: ',' %}{% endunless %}
+  {% endfor %}
+  
+  {% assign option_json = option_json | append: ']' %}
+  
+  {% assign option_name_lower = option.name | downcase %}
+  {% if option_name_lower contains 'color' or option_name_lower contains 'colour' %}
+    {% assign option_json = option_json | append: ',"color_config":{' %}
+    {% assign color_config_items = '' %}
+    
+    {% for value in option.values %}
+      {% comment %} First, determine the display name {% endcomment %}
+      {% assign display_name = value %}
+      {% if color_display_names %}
+        {% assign name_pairs = color_display_names | split: ',' %}
+        {% for name_pair in name_pairs %}
+          {% assign name_parts = name_pair | split: ':' %}
+          {% if name_parts[0] == value %}
+            {% assign display_name = name_parts[1] %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      
+      {% comment %} Build the color item with correct display name {% endcomment %}
+      {% assign color_item = '"' | append: value | append: '":{"name":"' | append: display_name | append: '"' %}
+      
+      {% comment %} Look for hex value in generic hex metafield {% endcomment %}
+      {% if color_hex_values %}
+        {% assign hex_pairs = color_hex_values | split: ',' %}
+        {% for hex_pair in hex_pairs %}
+          {% assign hex_parts = hex_pair | split: ':' %}
+          {% if hex_parts[0] == value %}
+            {% assign color_item = color_item | append: ',"hex":"' | append: hex_parts[1] | append: '"' %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      
+      {% comment %} Look for swatch image in file list {% endcomment %}
+      {% if color_swatch_images.value %}
+        {% assign value_lower = value | downcase %}
+        {% for swatch_file in color_swatch_images.value %}
+          {% assign file_name_lower = swatch_file | downcase %}
+          {% if file_name_lower contains value_lower %}
+            {% assign swatch_url = swatch_file | image_url %}
+            {% assign color_item = color_item | append: ',"image":"' | append: swatch_url | append: '"' %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      
+      {% assign color_item = color_item | append: '}' %}
+      
+      {% assign color_config_items = color_config_items | append: color_item %}
+      {% unless forloop.last %}{% assign color_config_items = color_config_items | append: ',' %}{% endunless %}
+    {% endfor %}
+    
+    {% assign option_json = option_json | append: color_config_items | append: '}' %}
+  {% endif %}
+  
+  {% assign option_json = option_json | append: '}' %}
+  
+  {% assign options_array = options_array | append: option_json %}
+  {% unless forloop.last %}{% assign options_array = options_array | append: ',' %}{% endunless %}
+{% endfor %}
+
+{% assign options_json = '[' | append: options_array | append: ']' %}
+
+<variant-selector
+  data-initial-variant-id="{{ product.selected_or_first_available_variant.id }}"
+  data-variants='{{ variants_json }}'
+  data-options='{{ options_json }}'
+>
+  <div class="variant-selector-fallback">
+    <div class="space-y-4">
+      {% for option in product.options_with_values %}
+        <div class="variant-option">
+          <label for="option-{{ option.name | handle }}" class="block text-sm font-medium text-gray-700 mb-2">
+            {{ option.name }}
+          </label>
+          <select
+            id="option-{{ option.name | handle }}"
+            name="options[{{ option.name | escape }}]"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+          >
+            {% for value in option.values %}
+              <option 
+                value="{{ value | escape }}"
+                {% if option.selected_value == value %}selected{% endif %}
+              >
+                {{ value }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</variant-selector>

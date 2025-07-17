@@ -1,0 +1,130 @@
+<section class="relative">
+  <div class="theme-container p-4">
+    {% if section.settings.title != blank %}
+      <div class="mb-8 text-center">
+        <h2 class="text-primary text-2xl md:text-3xl">
+          {{ section.settings.title }}
+        </h2>
+        {% if section.settings.subtitle != blank %}
+          <p class="text-primary-light mt-2">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% assign collection = collections[section.settings.collection] %}
+    {% assign products_to_show = section.settings.products_to_show %}
+
+    {% if collection != blank and collection.products.size > 0 %}
+      <div class="mx-auto grid grid-cols-2 gap-6 md:gap-8 lg:grid-cols-4">
+        {% for product in collection.products limit: products_to_show %}
+          {% render 'product-card',
+            product: product,
+            rounded_corners: section.settings.is_corners_rounded
+          %}
+        {% endfor %}
+      </div>
+
+      {% if section.settings.show_view_all %}
+        <div class="mt-10 text-center">
+          <a href="{{ collection.url }}" class="btn {{ section.settings.btn_style }}">
+            {{ section.settings.view_all_text }}
+          </a>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="py-12 text-center">
+        <p class="text-primary">No products found in this collection.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "tag": "section",
+  "class": "featured-products-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "say hello to our bestsellers"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "is_corners_rounded",
+      "label": "Rounded corners",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all button text",
+      "default": "View all collections"
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "Button Style",
+      "options": [
+        {
+          "value": "btn-primary",
+          "label": "Primary Button"
+        },
+        {
+          "value": "btn-secondary",
+          "label": "Secondary Button"
+        },
+        {
+          "value": "btn-accent",
+          "label": "Accent Button"
+        },
+        {
+          "value": "btn-accent-outline",
+          "label": "Accent Outline"
+        }
+      ],
+      "default": "btn-primary"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products",
+      "settings": {
+        "title": "say hello to our bestsellers",
+        "products_to_show": 4
+      }
+    }
+  ]
+}
+{% endschema %}

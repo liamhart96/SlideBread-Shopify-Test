@@ -1,0 +1,26 @@
+.custom-scrollbar {
+  @apply overflow-y-hidden overflow-x-scroll;
+  scrollbar-gutter: stable;
+  -ms-overflow-style: scrollbar;
+  scrollbar-width: auto;
+}
+
+/* Webkit-based browsers (Chrome, Edge, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+  @apply block h-[10px] w-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-tertiary-dark rounded-md;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-tertiary-light border-tertiary-dark rounded-md border-[3px] border-solid;
+  opacity: 1 !important;
+}
+
+/* Override auto-hide behavior */
+.custom-scrollbar {
+  -webkit-overflow-scrolling: auto !important;
+  @apply overflow-y-hidden overflow-x-scroll;
+}

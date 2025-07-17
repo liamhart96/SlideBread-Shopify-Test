@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+echo "Running pre-commit checks..."
+
+# Run lint-staged to format and lint only staged files
+echo "🔍 Running lint-staged..."
+npm run lint-staged || {
+  echo "❌ Checks failed. Please fix issues and try committing again."
+  exit 1
+}
+
+# Shopify theme check on the entire project
+echo "🔍 Running Shopify theme check..."
+npm run theme-check || {
+  echo "❌ Shopify theme check failed. Please fix theme issues and try committing again."
+  exit 1
+}
+
+echo "✅ All checks passed!"

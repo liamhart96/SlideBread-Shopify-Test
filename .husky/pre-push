@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+echo "Running pre-push checks..."
+
+# Run full checks before pushing
+echo "🔍 Running all checks..."
+npm run lint-all || {
+  echo "❌ Pre-push checks failed. Please fix issues before pushing."
+  exit 1
+}
+
+echo "✅ All checks passed!"
