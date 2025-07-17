@@ -1,19 +1,22 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+
 <div class="my-4">
-  {% if product.compare_at_price > product.price %}
+  {% if current_variant.compare_at_price > current_variant.price %}
     <div class="flex items-center">
-      <span class="text-primary mr-2 line-through">
-        {{- product.compare_at_price | money_without_trailing_zeros -}}
+
+      <span class="font-heading-serif text-3xl text-gray-500 line-through mr-2" data-product-price>
+        {{- current_variant.compare_at_price | money_without_trailing_zeros -}}
       </span>
-      <span class="text-2xl font-bold text-red-600" data-product-price>
-        {{- product.price | money -}}
+      <span class="font-heading-serif text-3xl" data-product-price-sale>
+        {{- current_variant.price | money_without_trailing_zeros -}}
       </span>
-      <span class="ml-2 text-sm text-red-600"
-        >Save {{ product.compare_at_price | minus: product.price | money -}}
-      </span>
+
+      <span class="absolute -top-2 -right-2 ml-2 bg-red-600 border border-red-800 text-xs text-white px-2 py-1 rounded-md uppercase">Save {{ current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price | round }}%</span>
+
     </div>
   {% else %}
-    <span class="text-2xl font-bold" data-product-price>
-      {{- product.price | money_without_trailing_zeros -}}
+    <span class="font-heading-serif text-3xl " data-product-price>
+      {{- current_variant.price | money_without_trailing_zeros -}}
     </span>
   {% endif %}
 </div>

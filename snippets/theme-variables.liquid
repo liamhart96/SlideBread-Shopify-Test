@@ -19,6 +19,16 @@
     src: url("{{ 'Gotham_Bold.ttf' | asset_url }}") format("ttf");
   }
 
+  @font-face {
+    font-family: Gotham_Book;
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url("{{ 'Gotham_Book.woff2' | asset_url }}") format("woff2"),
+    src: url("{{ 'Gotham_Book.woff' | asset_url }}") format("woff"),
+    src: url("{{ 'Gotham_Book.ttf' | asset_url }}") format("ttf");
+  }
+
   {{ base_font | font_face: font_display: 'block' }}
   {{ base_font_bold | font_face: font_display: 'swap' }}
   {{ base_font_italic | font_face: font_display: 'swap' }}
@@ -41,7 +51,7 @@
     /* Typography Variables */
     --font-heading-serif-family: Gotham_Bold, {{ settings.type_header_font.fallback_families }};
     --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
-    --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-body-family: Gotham_Book, {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
 
     /* Color Variables */
     --color-primary-light: {{ settings.colors_primary_light }};

@@ -9,6 +9,7 @@ interface ProductVariant {
   available: boolean;
   options: string[];
   price: string;
+  compare_at_price?: string;
   featured_image?: {
     src: string;
     alt: string;
@@ -71,13 +72,13 @@ function CustomDropdown({ label, selectedValue, options, onSelect, className }: 
 
   return (
     <div className={twMerge("relative flex items-center gap-2", className)} ref={dropdownRef}>
-      <label className="block font-bold">{label}</label>
+      <label className="block font-heading-serif">{label}</label>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="focus:border-primary focus:ring-primary flex w-fit items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2 text-left shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-opacity-20"
       >
-        <span className="text-sm font-bold">{selectedValue}</span>
+        <span className="font-heading-serif text-sm">{selectedValue}</span>
         <svg
           className={twMerge(
             "h-5 w-5 text-gray-400 transition-transform",
@@ -192,9 +193,9 @@ function ColorSelector({
 
   return (
     <div className={twMerge("", className)}>
-      <label className="mb-2 block font-bold">
+      <label className="mb-2 block font-heading-serif">
         {label}:{" "}
-        <span className="font-base">{colorConfig?.[selectedValue]?.name || selectedValue}</span>
+        <span className="font-heading-serif">{colorConfig?.[selectedValue]?.name || selectedValue}</span>
       </label>
       <div className="flex flex-wrap gap-3">
         {options.map((option) => {
@@ -368,18 +369,49 @@ class VariantSelectorElement extends ReactCustomElement {
         window.history.replaceState({}, "", url.toString());
 
         // Update product price
-        const priceElement = document.querySelector("[data-product-price]");
-        if (priceElement) {
+        const priceContainer = document.querySelector("[data-product-price]")?.parentElement;
+        if (priceContainer) {
           const price = parseFloat(variant.price) / 100; // Convert cents to pounds
+          const compareAtPrice = variant.compare_at_price
+            ? parseFloat(variant.compare_at_price) / 100
+            : null;
 
-          const formattedPrice = new Intl.NumberFormat("en-GB", {
-            style: "currency",
-            currency: "GBP",
-            minimumFractionDigits: price % 1 === 0 ? 0 : 2, // Show decimals only if needed
-            maximumFractionDigits: 2,
-          }).format(price);
+          const formatPrice = (priceValue: number) => {
+            return new Intl.NumberFormat("en-GB", {
+              style: "currency",
+              currency: "GBP",
+              minimumFractionDigits: priceValue % 1 === 0 ? 0 : 2,
+              maximumFractionDigits: 2,
+            }).format(priceValue);
+          };
 
-          priceElement.textContent = formattedPrice;
+          // Check if this is a sale (compare_at_price exists and is greater than price)
+          if (compareAtPrice && compareAtPrice > price) {
+            // Calculate savings percentage
+            const savingsPercentage = Math.round(((compareAtPrice - price) / compareAtPrice) * 100);
+
+            // Create sale price structure
+            priceContainer.innerHTML = `
+              <div class="flex items-center">
+                <span class="text-3xl text-gray-500 font-bold line-through mr-2" data-product-price>
+                  ${formatPrice(compareAtPrice)}
+                </span>
+                <span class="text-3xl font-bold" data-product-price-sale>
+                  ${formatPrice(price)}
+                </span>
+                <span class="absolute -top-2 -right-2 ml-2 bg-red-600 border border-red-800 text-xs text-white px-2 py-1 rounded-md uppercase">
+                  Save ${savingsPercentage}%
+                </span>
+              </div>
+            `;
+          } else {
+            // Regular price display
+            priceContainer.innerHTML = `
+              <span class="text-3xl font-bold" data-product-price>
+                ${formatPrice(price)}
+              </span>
+            `;
+          }
         }
 
         // Dispatch variant change event for gallery

@@ -30,18 +30,12 @@
             class="h-full w-full object-cover"
             loading="lazy"
           >
-          <button
-            class="gallery-zoom-button absolute bottom-16 right-4 flex cursor-pointer items-center justify-center rounded-full bg-white/50 p-2 transition-colors duration-200 hover:bg-white/70"
+          {% comment %} <button
+            class="gallery-zoom-button absolute bottom-4 right-4 flex cursor-pointer items-center justify-center rounded-full bg-white/50 p-2 transition-colors duration-200 hover:bg-white/70"
             aria-label="Enlarge image"
           >
             {% render 'icons' with icon: 'search', class: 'w-5 h-5 text-primary' %}
-          </button>
-          <button
-            class="absolute bottom-4 right-4 flex cursor-pointer items-center justify-center rounded-full bg-white/50 p-2 transition-colors duration-200 hover:bg-white/70"
-            aria-label="Enlarge image"
-          >
-            {% render 'icons' with icon: 'heart', class: 'w-5 h-5 text-red-300' %}
-          </button>
+          </button> {% endcomment %}
         </div>
       {% endfor %}
     </div>
@@ -49,7 +43,7 @@
 </div>
 
 <!-- Gallery Modal -->
-<dialog id="gallery-modal" class="gallery-modal">
+{% comment %} <dialog id="gallery-modal" class="gallery-modal">
   <div class="gallery-modal-content">
     <button class="gallery-modal-close">
       {% render 'icons' with icon: 'close' %}
@@ -69,4 +63,4 @@
       {% endfor %}
     </div>
   </div>
-</dialog>
+</dialog> {% endcomment %}
