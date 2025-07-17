@@ -31,13 +31,23 @@
         "buy_buttons_brTMYq": {
           "type": "buy_buttons",
           "settings": {}
+        },
+        "upsells_ABC123": {
+          "type": "upsells",
+          "settings": {
+            "product_selection": "specific",
+            "collection": "",
+            "product_1": "screen-protector",
+            "product_2": "magnetic-leather-back"
+          }
         }
       },
       "block_order": [
         "product_attributes_rWnN63",
         "product_price_XrcEnE",
         "variant_picker_mtQjcP",
-        "buy_buttons_brTMYq"
+        "buy_buttons_brTMYq",
+        "upsells_ABC123"
       ],
       "settings": {}
     },

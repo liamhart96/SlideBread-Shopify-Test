@@ -11,6 +11,7 @@
   {% endfor %}
   
   {% assign variant_json = variant_json | append: '],"price":"' | append: variant.price | append: '"' %}
+  {% assign variant_json = variant_json | append: ',"compare_at_price":"' | append: variant.compare_at_price | append: '"' %}
   
   {% if variant.featured_image %}
     {% assign variant_json = variant_json | append: ',"featured_image":{"src":"' | append: variant.featured_image | append: '","alt":"' | append: variant.featured_image.alt | append: '"}' %}
