@@ -1,6 +1,6 @@
 {
-  "_CartService.DjU9-j2s.min.js": {
-    "file": "CartService.DjU9-j2s.min.js",
+  "_CartService.BMkk3yap.min.js": {
+    "file": "CartService.BMkk3yap.min.js",
     "name": "CartService",
     "imports": [
       "_bundle-mjs.DY7OEoBL.min.js"
@@ -13,6 +13,30 @@
   "_modulepreload-polyfill.B5Qt9EMX.min.js": {
     "file": "modulepreload-polyfill.B5Qt9EMX.min.js",
     "name": "modulepreload-polyfill"
+  },
+  "assets/Gotham_Bold.ttf": {
+    "file": "Gotham_Bold.ttf",
+    "src": "assets/Gotham_Bold.ttf"
+  },
+  "assets/Gotham_Bold.woff": {
+    "file": "Gotham_Bold.woff",
+    "src": "assets/Gotham_Bold.woff"
+  },
+  "assets/Gotham_Bold.woff2": {
+    "file": "Gotham_Bold.woff2",
+    "src": "assets/Gotham_Bold.woff2"
+  },
+  "assets/Gotham_Book.ttf": {
+    "file": "Gotham_Book.ttf",
+    "src": "assets/Gotham_Book.ttf"
+  },
+  "assets/Gotham_Book.woff": {
+    "file": "Gotham_Book.woff",
+    "src": "assets/Gotham_Book.woff"
+  },
+  "assets/Gotham_Book.woff2": {
+    "file": "Gotham_Book.woff2",
+    "src": "assets/Gotham_Book.woff2"
   },
   "frontend/entrypoints/collection.ts": {
     "file": "collection.BbGkfyDs.min.js",
@@ -34,13 +58,12 @@
     ]
   },
   "frontend/entrypoints/product.ts": {
-    "file": "product.DnbSwKdI.min.js",
+    "file": "product.DnsCGC1_.min.js",
     "name": "product",
     "src": "frontend/entrypoints/product.ts",
     "isEntry": true,
     "imports": [
-      "_modulepreload-polyfill.B5Qt9EMX.min.js",
-      "_CartService.DjU9-j2s.min.js",
+      "_CartService.BMkk3yap.min.js",
       "_bundle-mjs.DY7OEoBL.min.js"
     ],
     "css": [
@@ -48,18 +71,18 @@
     ]
   },
   "frontend/entrypoints/theme.css": {
-    "file": "theme.DdPR5NpV.min.css",
+    "file": "theme.DpeuXbhF.min.css",
     "src": "frontend/entrypoints/theme.css",
     "isEntry": true
   },
   "frontend/entrypoints/theme.ts": {
-    "file": "theme.c1fLT4Si.min.js",
+    "file": "theme.DZYZXbl9.min.js",
     "name": "theme",
     "src": "frontend/entrypoints/theme.ts",
     "isEntry": true,
     "imports": [
       "_modulepreload-polyfill.B5Qt9EMX.min.js",
-      "_CartService.DjU9-j2s.min.js",
+      "_CartService.BMkk3yap.min.js",
       "_bundle-mjs.DY7OEoBL.min.js"
     ]
   }

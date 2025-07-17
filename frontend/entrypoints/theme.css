@@ -1,3 +1,24 @@
+/* Import fonts to ensure they're included in the build */
+@font-face {
+  font-family: "Gotham_Bold";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../assets/Gotham_Bold.woff2") format("woff2"),
+       url("../../assets/Gotham_Bold.woff") format("woff"),
+       url("../../assets/Gotham_Bold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Gotham_Book";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../assets/Gotham_Book.woff2") format("woff2"),
+       url("../../assets/Gotham_Book.woff") format("woff"),
+       url("../../assets/Gotham_Book.ttf") format("ttf");
+}
+
 @import "tailwindcss" source("../..");
 
 @plugin '@tailwindcss/typography';

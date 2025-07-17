@@ -395,10 +395,10 @@ class VariantSelectorElement extends ReactCustomElement {
             // Create sale price structure
             priceContainer.innerHTML = `
               <div class="flex items-center">
-                <span class="text-3xl text-gray-500 font-bold line-through mr-2" data-product-price>
+                <span class="text-3xl text-gray-500 line-through mr-2 font-heading-serif" data-product-price>
                   ${formatPrice(compareAtPrice)}
                 </span>
-                <span class="text-3xl font-bold" data-product-price-sale>
+                <span class="text-3xl font-heading-serif" data-product-price-sale>
                   ${formatPrice(price)}
                 </span>
                 <span class="absolute -top-2 -right-2 ml-2 bg-red-600 border border-red-800 text-xs text-white px-2 py-1 rounded-md uppercase">
@@ -409,7 +409,7 @@ class VariantSelectorElement extends ReactCustomElement {
           } else {
             // Regular price display
             priceContainer.innerHTML = `
-              <span class="text-3xl font-bold" data-product-price>
+              <span class="text-3xl font-heading-serif" data-product-price>
                 ${formatPrice(price)}
               </span>
             `;
