@@ -98,6 +98,36 @@
 }
 
 /* ==========================================================================
+    Gallery Loading States
+========================================================================== */
+
+.gallery-loading {
+  @apply opacity-0 transition-opacity duration-300;
+}
+
+.gallery-loaded {
+  @apply opacity-100 transition-opacity duration-300;
+}
+
+/* Skeleton loading for nav gallery */
+.product-gallery-carousel-nav.gallery-loading {
+  @apply bg-gray-100;
+}
+
+.product-gallery-carousel-nav.gallery-loading .carousel-cell {
+  @apply animate-pulse bg-gray-200;
+}
+
+/* Skeleton loading for main gallery */
+.product-gallery-carousel-main.gallery-loading {
+  @apply bg-gray-100;
+}
+
+.product-gallery-carousel-main.gallery-loading .carousel-cell {
+  @apply animate-pulse bg-gray-200;
+}
+
+/* ==========================================================================
     Additional Flickity Styles
 ========================================================================== */
 

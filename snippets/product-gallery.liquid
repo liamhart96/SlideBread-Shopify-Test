@@ -1,7 +1,7 @@
 <div class="product-gallery flex gap-4">
   <!-- Vertical thumbnails on the left -->
   <div class="hidden w-1/12 min-w-[90px] md:block">
-    <div class="product-gallery-carousel product-gallery-carousel-nav">
+    <div class="product-gallery-carousel product-gallery-carousel-nav gallery-loading">
       {% for image in product.images %}
         <div class="carousel-cell overflow-hidden rounded-lg">
           <img
@@ -19,7 +19,7 @@
 
   <!-- Main carousel container -->
   <div class="w-full md:w-11/12">
-    <div class="product-gallery-carousel product-gallery-carousel-main relative flex-1">
+    <div class="product-gallery-carousel product-gallery-carousel-main gallery-loading relative flex-1">
       {% for image in product.images %}
         <div class="carousel-cell group relative w-full overflow-hidden md:rounded-lg">
           <img

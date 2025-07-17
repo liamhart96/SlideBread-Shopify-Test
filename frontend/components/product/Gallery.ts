@@ -165,42 +165,78 @@ export class Gallery extends BaseCarousel {
       return;
     }
 
+    // Get the appropriate Flickity instance
+    let flickityInstance: Flickity | null = null;
+    if (selector === ".product-gallery-carousel-main") {
+      flickityInstance = this.mainGallery;
+    } else if (selector === ".product-gallery-carousel-nav") {
+      flickityInstance = this.navGallery;
+    }
+
+    if (!flickityInstance) {
+      return;
+    }
+
+    // Add loading state during variant change
+    carousel.classList.add("gallery-loading");
+    carousel.classList.remove("gallery-loaded");
+
+    // Store current selected index to restore later
+    const currentIndex = flickityInstance.selectedIndex;
+
+    // Remove all existing cells from Flickity
     const existingCells = carousel.querySelectorAll(".carousel-cell");
-    const existingImages = carousel.querySelectorAll("img");
-
-    // Hide all cells first
     existingCells.forEach((cell) => {
-      (cell as HTMLElement).style.display = "none";
+      flickityInstance?.remove(cell);
     });
 
-    // Show and update only the cells that match our variant images
+    // Add back only the cells for variant images
     images.forEach((variantImage, index) => {
-      if (index < existingCells.length) {
-        const cell = existingCells[index] as HTMLElement;
-        const img = existingImages[index] as HTMLImageElement;
-
-        // Show the cell
-        cell.style.display = "";
-
-        // Update the image source
-        const imageUrl = this.getImageUrl(variantImage.src, size);
-        img.src = imageUrl;
-        img.alt = variantImage.alt || `Product image ${index + 1}`;
+      // Create a new cell element with proper structure
+      const cellElement = document.createElement("div");
+      if (selector === ".product-gallery-carousel-nav") {
+        cellElement.className = "carousel-cell overflow-hidden rounded-lg";
+      } else {
+        cellElement.className = "carousel-cell group relative w-full overflow-hidden md:rounded-lg";
       }
+
+      const imgElement = document.createElement("img");
+      const imageUrl = this.getImageUrl(variantImage.src, size);
+      imgElement.src = imageUrl;
+      imgElement.alt = variantImage.alt || `Product image ${index + 1}`;
+      imgElement.className = "h-full w-full object-cover";
+      imgElement.loading = "lazy";
+
+      // Set proper dimensions for different image sizes
+      if (size === "small") {
+        imgElement.width = 200;
+        imgElement.height = 200;
+      } else if (size === "large") {
+        imgElement.width = 800;
+        imgElement.height = 800;
+      } else {
+        imgElement.width = 2048;
+        imgElement.height = 2048;
+      }
+
+      cellElement.appendChild(imgElement);
+
+      // Add the cell to Flickity
+      flickityInstance?.append(cellElement);
     });
 
-    // Refresh Flickity to recalculate positions
-    if (selector === ".product-gallery-carousel-main" && this.mainGallery) {
-      setTimeout(() => {
-        this.mainGallery?.reposition();
-      }, 100);
-    }
+    // Restore selection and remove loading state
+    setTimeout(() => {
+      if (images.length > 0) {
+        const indexToSelect = currentIndex < images.length ? currentIndex : 0;
+        flickityInstance?.select(indexToSelect, false, true);
+      }
+      flickityInstance?.resize();
 
-    if (selector === ".product-gallery-carousel-nav" && this.navGallery) {
-      setTimeout(() => {
-        this.navGallery?.reposition();
-      }, 100);
-    }
+      // Remove loading state after images are loaded
+      carousel.classList.remove("gallery-loading");
+      carousel.classList.add("gallery-loaded");
+    }, 100);
   }
 
   private addGalleryButtons(cell: HTMLElement): void {
@@ -260,29 +296,48 @@ export class Gallery extends BaseCarousel {
     const navGalleryElement = document.querySelector(
       ".product-gallery-carousel-nav"
     ) as HTMLElement;
-    if (!navGalleryElement) {
+    const mainGalleryElement = document.querySelector(
+      ".product-gallery-carousel-main"
+    ) as HTMLElement;
+
+    if (!navGalleryElement || !mainGalleryElement) {
       return;
     }
 
+    // Add loading state classes
+    navGalleryElement.classList.add("gallery-loading");
+    mainGalleryElement.classList.add("gallery-loading");
+
+    // Initialize nav gallery first
     this.navGallery = new Flickity(navGalleryElement, {
       asNavFor: ".product-gallery-carousel-main",
       pageDots: false,
       groupCells: "100%",
       cellAlign: "left",
       prevNextButtons: false,
+      imagesLoaded: true,
+      on: {
+        ready: () => {
+          // Remove loading state when nav gallery is ready
+          navGalleryElement.classList.remove("gallery-loading");
+          navGalleryElement.classList.add("gallery-loaded");
+        },
+      },
     });
 
-    const mainGalleryElement = document.querySelector(
-      ".product-gallery-carousel-main"
-    ) as HTMLElement;
-    if (!mainGalleryElement) {
-      return;
-    }
-
+    // Initialize main gallery
     this.mainGallery = new Flickity(mainGalleryElement, {
       prevNextButtons: true,
       pageDots: true,
       cellAlign: "left",
+      imagesLoaded: true,
+      on: {
+        ready: () => {
+          // Remove loading state when main gallery is ready
+          mainGalleryElement.classList.remove("gallery-loading");
+          mainGalleryElement.classList.add("gallery-loaded");
+        },
+      },
     });
   }
 

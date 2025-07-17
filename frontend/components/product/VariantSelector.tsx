@@ -72,7 +72,7 @@ function CustomDropdown({ label, selectedValue, options, onSelect, className }: 
 
   return (
     <div className={twMerge("relative flex items-center gap-2", className)} ref={dropdownRef}>
-      <label className="block font-heading-serif">{label}</label>
+      <label className="font-heading-serif block">{label}</label>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -193,9 +193,11 @@ function ColorSelector({
 
   return (
     <div className={twMerge("", className)}>
-      <label className="mb-2 block font-heading-serif">
+      <label className="font-heading-serif mb-2 block">
         {label}:{" "}
-        <span className="font-heading-serif">{colorConfig?.[selectedValue]?.name || selectedValue}</span>
+        <span className="font-heading-serif">
+          {colorConfig?.[selectedValue]?.name || selectedValue}
+        </span>
       </label>
       <div className="flex flex-wrap gap-3">
         {options.map((option) => {

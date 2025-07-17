@@ -15,8 +15,8 @@
     font-style: normal;
     font-display: swap;
     src: url("{{ 'Gotham_Bold.woff2' | asset_url }}") format("woff2"),
-    src: url("{{ 'Gotham_Bold.woff' | asset_url }}") format("woff"),
-    src: url("{{ 'Gotham_Bold.ttf' | asset_url }}") format("ttf");
+         url("{{ 'Gotham_Bold.woff' | asset_url }}") format("woff"),
+         url("{{ 'Gotham_Bold.ttf' | asset_url }}") format("ttf");
   }
 
   @font-face {
@@ -25,8 +25,8 @@
     font-style: normal;
     font-display: swap;
     src: url("{{ 'Gotham_Book.woff2' | asset_url }}") format("woff2"),
-    src: url("{{ 'Gotham_Book.woff' | asset_url }}") format("woff"),
-    src: url("{{ 'Gotham_Book.ttf' | asset_url }}") format("ttf");
+         url("{{ 'Gotham_Book.woff' | asset_url }}") format("woff"),
+         url("{{ 'Gotham_Book.ttf' | asset_url }}") format("ttf");
   }
 
   {{ base_font | font_face: font_display: 'block' }}
