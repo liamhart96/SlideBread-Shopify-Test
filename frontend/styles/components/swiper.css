@@ -1,0 +1,158 @@
+/* ==========================================================================
+    Custom Swiper Overrides
+========================================================================== */
+
+/* Gallery Loading States */
+.gallery-loading {
+  @apply opacity-0 transition-opacity duration-300;
+}
+
+.gallery-loaded {
+  @apply opacity-100 transition-opacity duration-300;
+}
+
+/* Skeleton loading for nav gallery */
+.product-gallery-carousel-nav.gallery-loading {
+  @apply bg-gray-100;
+}
+
+.product-gallery-carousel-nav.gallery-loading .swiper-slide {
+  @apply animate-pulse bg-gray-200;
+}
+
+/* Skeleton loading for main gallery */
+.product-gallery-carousel-main.gallery-loading {
+  @apply bg-gray-100;
+}
+
+.product-gallery-carousel-main.gallery-loading .swiper-slide {
+  @apply animate-pulse bg-gray-200;
+}
+
+/* Override default Swiper button colors */
+.swiper-button-next,
+.swiper-button-prev {
+  --swiper-theme-color: #000000;
+  display: none !important; /* Hide any navigation buttons */
+}
+
+/* Navigation Gallery Styles */
+.product-gallery-carousel-nav.swiper {
+  @apply w-full;
+  
+  /* Mobile: horizontal layout */
+  @media (max-width: 767px) {
+    padding: 10px 0; /* Add padding to prevent cut-off */
+    
+    .swiper-wrapper {
+      @apply flex-row items-center justify-center gap-2;
+      height: 100%;
+    }
+    
+    .swiper-slide {
+      @apply cursor-pointer opacity-30 transition-opacity duration-300;
+      width: 18% !important; /* Percentage width for responsive thumbnails */
+      height: 100% !important;
+      flex-shrink: 0;
+      
+      &.swiper-slide-thumb-active {
+        opacity: 1 !important;
+      }
+      
+      img {
+        @apply w-full h-full object-cover rounded-lg;
+      }
+    }
+  }
+  
+  /* Desktop: vertical layout */
+  @media (min-width: 768px) {
+    height: 600px; /* Match main gallery height */
+    
+    .swiper-wrapper {
+      @apply flex-col;
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+    
+    .swiper-slide {
+      @apply cursor-pointer opacity-30 transition-opacity duration-300;
+      height: auto !important; /* Allow auto height for proper spacing */
+      flex-shrink: 0;
+      
+      &.swiper-slide-thumb-active {
+        opacity: 1 !important;
+      }
+      
+      img {
+        @apply w-full object-cover rounded-lg;
+        height: 108px; /* Adjusted height to fit 5 images with spacing */
+        aspect-ratio: 1/1; /* Keep square aspect ratio */
+      }
+    }
+  }
+}
+
+/* Main Gallery Styles */
+.product-gallery-carousel-main.swiper {
+  @apply w-full;
+  
+  /* Mobile: shorter height */
+  @media (max-width: 767px) {
+    height: 350px; /* Reduced to accommodate larger thumbnail area */
+  }
+  
+  /* Desktop: full height */
+  @media (min-width: 768px) {
+    height: 600px;
+  }
+  
+  .swiper-slide {
+    @apply flex items-center justify-center;
+    
+    .swiper-zoom-container {
+      @apply flex items-center justify-center h-full w-full;
+      cursor: zoom-in;
+      
+      &.swiper-zoom-container-zoomed {
+        cursor: zoom-out;
+      }
+      
+      /* Ensure zoom cursor appears when hovering over images */
+      &:hover {
+        cursor: zoom-in;
+      }
+      
+      &.swiper-zoom-container-zoomed:hover {
+        cursor: zoom-out;
+      }
+    }
+    
+    img {
+      @apply h-full w-full object-cover;
+      pointer-events: none; /* Prevent image drag interference */
+    }
+  }
+}
+
+/* Mobile gallery spacing */
+@media (max-width: 767px) {
+  .product-gallery {
+    @apply gap-3;
+  }
+  
+  .product-gallery-carousel-nav.swiper {
+    @apply mb-2;
+  }
+}
+
+/* Smooth transitions for thumbnail gallery */
+.product-gallery-carousel-nav .swiper-slide {
+  transition: opacity 0.3s ease;
+  
+}
+
+/* Main gallery slide transitions */
+.product-gallery-carousel-main .swiper-slide {
+  transition: transform 0.3s ease;
+} 

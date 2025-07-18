@@ -1,6 +1,6 @@
 {
-  "_CartService.BMkk3yap.min.js": {
-    "file": "CartService.BMkk3yap.min.js",
+  "_CartService.BdpXNtqt.min.js": {
+    "file": "CartService.BdpXNtqt.min.js",
     "name": "CartService",
     "imports": [
       "_bundle-mjs.DY7OEoBL.min.js"
@@ -48,41 +48,32 @@
       "_bundle-mjs.DY7OEoBL.min.js"
     ]
   },
-  "frontend/entrypoints/colour-palette.ts": {
-    "file": "colour-palette.B8IxPwKg.min.js",
-    "name": "colour-palette",
-    "src": "frontend/entrypoints/colour-palette.ts",
-    "isEntry": true,
-    "imports": [
-      "_modulepreload-polyfill.B5Qt9EMX.min.js"
-    ]
-  },
   "frontend/entrypoints/product.ts": {
-    "file": "product.DnsCGC1_.min.js",
+    "file": "product.B2AEAprX.min.js",
     "name": "product",
     "src": "frontend/entrypoints/product.ts",
     "isEntry": true,
     "imports": [
-      "_CartService.BMkk3yap.min.js",
+      "_CartService.BdpXNtqt.min.js",
       "_bundle-mjs.DY7OEoBL.min.js"
     ],
     "css": [
-      "product.B6b2TY3a.min.css"
+      "product.BU2VdmHC.min.css"
     ]
   },
   "frontend/entrypoints/theme.css": {
-    "file": "theme.DpeuXbhF.min.css",
+    "file": "theme.C_tgr7pJ.min.css",
     "src": "frontend/entrypoints/theme.css",
     "isEntry": true
   },
   "frontend/entrypoints/theme.ts": {
-    "file": "theme.DZYZXbl9.min.js",
+    "file": "theme.Bea9PPWV.min.js",
     "name": "theme",
     "src": "frontend/entrypoints/theme.ts",
     "isEntry": true,
     "imports": [
       "_modulepreload-polyfill.B5Qt9EMX.min.js",
-      "_CartService.BMkk3yap.min.js",
+      "_CartService.BdpXNtqt.min.js",
       "_bundle-mjs.DY7OEoBL.min.js"
     ]
   }

@@ -4,10 +4,10 @@ import { Gallery } from "@/components/product/Gallery";
 function initializeGallery() {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      Gallery.initialize(".gallery-modal-carousel");
+      Gallery.initialize();
     });
   } else {
-    Gallery.initialize(".gallery-modal-carousel");
+    Gallery.initialize();
   }
 }
 
