@@ -51,23 +51,163 @@
       ],
       "settings": {}
     },
-    "component_featured_products_JkDwMp": {
-      "type": "component-featured-products",
+    "component_image_with_text_gmnznM": {
+      "type": "component-image-with-text",
+      "name": "Image With Text",
       "settings": {
-        "title": "You may also like",
-        "subtitle": "",
-        "collection": "air-purifying",
-        "products_to_show": 4,
-        "is_corners_rounded": false,
+        "background_color": "#ffffff",
+        "layout_direction": "right",
+        "padding_bottom_mobile": "pb-4",
+        "padding_bottom_desktop": "md:pb-8",
+        "video": "shopify://files/videos/showcase.mp4",
+        "video_url": "",
+        "is_corners_rounded": true,
+        "video_autoplay": true,
+        "video_loop": false,
+        "video_muted": true,
+        "video_controls": false,
+        "heading": "ShowcaseYour iPhone",
+        "title_size": "text-4xl md:text-5xl lg:text-6xl",
+        "text": "<p>Ultra-thin and precision cut, Magnetic Leather Back maintains the form factor of your iPhone while giving it a sleek and sophisticated leather look.</p>",
         "show_view_all": false,
-        "view_all_text": "View all collections",
+        "button_label": "MORE INFO",
+        "button_link": "",
         "btn_style": "btn-primary"
+      }
+    },
+    "component_image_with_text_nwhJ6Q": {
+      "type": "component-image-with-text",
+      "name": "Image With Text",
+      "settings": {
+        "background_color": "#ffffff",
+        "layout_direction": "left",
+        "padding_bottom_mobile": "pb-4",
+        "padding_bottom_desktop": "md:pb-0",
+        "image": "shopify://shop_images/MagSafe_Magnetic_HRustic_copy-1.webp",
+        "video_url": "",
+        "is_corners_rounded": true,
+        "video_autoplay": false,
+        "video_loop": false,
+        "video_muted": true,
+        "video_controls": true,
+        "heading": "Made for MagSafe",
+        "title_size": "text-4xl md:text-5xl lg:text-6xl",
+        "text": "<p>Magnetic Leather Back is built with an integrated array of neodymium magnets to facilitate fast charging and ensure full compatibility with MagSafe chargers and accessories.</p>",
+        "show_view_all": false,
+        "button_label": "MORE INFO",
+        "button_link": "",
+        "btn_style": "btn-primary"
+      }
+    },
+    "component_accordion_kgawbf": {
+      "type": "component-accordion",
+      "blocks": {
+        "accordion_item_pbGyU6": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "What is your return policy?",
+            "content": "<p>We offer a 30-day return policy on all items.</p>",
+            "open": false
+          }
+        },
+        "accordion_item_zWdrNh": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "How long does shipping take?",
+            "content": "<p>Standard shipping takes 3-5 business days.</p>",
+            "open": false
+          }
+        },
+        "accordion_item_nVKNhN": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Do you offer international shipping?",
+            "content": "<p>Yes, we ship worldwide with varying delivery times.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "accordion_item_pbGyU6",
+        "accordion_item_zWdrNh",
+        "accordion_item_nVKNhN"
+      ],
+      "name": "Accordion",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h2"
+      }
+    },
+    "component_product_info_GjTzFU": {
+      "type": "component-product-info",
+      "blocks": {
+        "info_column_XWekAV": {
+          "type": "info_column",
+          "settings": {
+            "title": "Materials",
+            "content": "Vegetable-tanned Horween leather|Ultra-thin fiberglass body|Soft microfiber|Microsuction",
+            "display_as_bullets": true,
+            "use_metafield": false,
+            "metafield_namespace": "",
+            "metafield_title": "",
+            "metafield_content": ""
+          }
+        },
+        "info_column_hGdFKE": {
+          "type": "info_column",
+          "settings": {
+            "title": "Technical",
+            "content": "Thickness: 2.20mm|Raised polycarbonate camera ring|MagSafe & wireless charging compatible",
+            "display_as_bullets": true,
+            "use_metafield": false,
+            "metafield_namespace": "",
+            "metafield_title": "",
+            "metafield_content": ""
+          }
+        },
+        "info_column_cAnyNQ": {
+          "type": "info_column",
+          "settings": {
+            "title": "Devices",
+            "content": "Compatible with iPhone 16 Pro Max",
+            "display_as_bullets": false,
+            "use_metafield": false,
+            "metafield_namespace": "",
+            "metafield_title": "",
+            "metafield_content": ""
+          }
+        },
+        "info_column_LqLrPm": {
+          "type": "info_column",
+          "settings": {
+            "title": "Product Guide",
+            "content": "Check out the product guide here",
+            "display_as_bullets": false,
+            "use_metafield": false,
+            "metafield_namespace": "",
+            "metafield_title": "",
+            "metafield_content": ""
+          }
+        }
+      },
+      "block_order": [
+        "info_column_XWekAV",
+        "info_column_hGdFKE",
+        "info_column_cAnyNQ",
+        "info_column_LqLrPm"
+      ],
+      "name": "Product Info",
+      "settings": {
+        "heading": "Info"
       }
     }
   },
   "order": [
     "main",
     "component_product_4A7aFn",
-    "component_featured_products_JkDwMp"
+    "component_image_with_text_gmnznM",
+    "component_image_with_text_nwhJ6Q",
+    "component_product_info_GjTzFU",
+    "component_accordion_kgawbf"
   ]
 }

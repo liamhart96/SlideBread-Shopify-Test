@@ -49,7 +49,7 @@
     ]
   },
   "frontend/entrypoints/product.ts": {
-    "file": "product.B2AEAprX.min.js",
+    "file": "product.BQ93lRCt.min.js",
     "name": "product",
     "src": "frontend/entrypoints/product.ts",
     "isEntry": true,
@@ -62,12 +62,12 @@
     ]
   },
   "frontend/entrypoints/theme.css": {
-    "file": "theme.C_tgr7pJ.min.css",
+    "file": "theme.aM8v_7c0.min.css",
     "src": "frontend/entrypoints/theme.css",
     "isEntry": true
   },
   "frontend/entrypoints/theme.ts": {
-    "file": "theme.Bea9PPWV.min.js",
+    "file": "theme.BJr1URoB.min.js",
     "name": "theme",
     "src": "frontend/entrypoints/theme.ts",
     "isEntry": true,
