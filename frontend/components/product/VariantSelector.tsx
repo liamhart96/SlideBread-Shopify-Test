@@ -93,7 +93,7 @@ function CustomDropdown({ label, selectedValue, options, onSelect, className }: 
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
+        <div className="absolute z-10 mt-1 top-0 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg">
           <div className="py-1">
             {options.map((option) => (
               <button
