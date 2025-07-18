@@ -273,16 +273,12 @@ export class Gallery {
   }
 
   private onSlideChange(): void {
-    // Add any slide change logic here
-    console.log("Slide changed to:", this.mainSwiper?.activeIndex);
-    
     // Ensure active thumbnail is properly highlighted
     this.updateActiveThumbnail();
   }
 
   private updateActiveThumbnail(): void {
     if (!this.mainSwiper || !this.navSwiper) return;
-    
     const activeIndex = this.mainSwiper.activeIndex;
     const navSlides = this.navSwiper.slides;
 

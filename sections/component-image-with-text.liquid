@@ -1,54 +1,132 @@
-<section class="relative">
+{% if section.settings.is_corners_rounded %}
+  {% assign rounded_corners = 'rounded-2xl' %}
+{% endif %}
+
+<section class="relative" >
   <div class="theme-container p-4">
-    <div class="flex flex-col items-center gap-8 md:flex-row md:gap-12 lg:gap-16">
-      {% if section.settings.is_corners_rounded %}
-        {% assign rounded_corners = 'rounded-lg' %}
+    <div class="shadow-[0_0_0_1px_#0000000f,0_1px_1px_-0.5px_#0000000f,0_3px_3px_-1.5px_#0000000f,0_6px_6px_-3px_#0000000f,0_12px_12px_-6px_#0000000f,0_24px_24px_-12px_#0000000f,0_24px_24px_-12px_#0000000f] {{ rounded_corners }}" style="background-color: {{ section.settings.background_color | default: '#ffffff' }};">
+
+      {% comment %} Set layout direction classes {% endcomment %}
+      {% if section.settings.layout_direction == 'right' %}
+        {% assign flex_direction = 'md:flex-row-reverse' %}
+      {% else %}
+        {% assign flex_direction = 'md:flex-row' %}
       {% endif %}
 
-      <!-- Image Column -->
-      <div class="w-full md:w-1/2">
-        {% if section.settings.image != blank %}
-          <div class="relative overflow-hidden {{ rounded_corners }}">
-            <img
-              src="{{ section.settings.image | image_url: width: 800 }}"
-              alt="{{ section.settings.heading | escape }}"
-              class="h-auto w-full object-cover"
-              width="800"
-              height="600"
-              loading="lazy"
-            >
-          </div>
-        {% else %}
-          <div class="flex aspect-[4/3] items-center justify-center rounded-lg bg-gray-200">
-            <span class="text-gray-500">{{ 'image' | placeholder_svg_tag: 'w-full h-64' }}</span>
-          </div>
-        {% endif %}
-      </div>
+      <div class="flex flex-col items-center gap-8 {{ flex_direction }} md:gap-12 lg:gap-16 pt-4 px-4 pr-4 md:pt-8 md:px-8 md:pr-8 {{ section.settings.padding_bottom_mobile }} {{ section.settings.padding_bottom_desktop }}">
+        
 
-      <!-- Content Column -->
-      <div class="flex w-full flex-col md:w-1/2">
-        {% if section.settings.heading != blank %}
-          <h2 class="text-primary font-base mb-4 text-2xl md:text-3xl lg:text-4xl">
-            {{ section.settings.heading }}
-          </h2>
-        {% endif %}
+        <!-- Media Column (Image or Video) -->
+        <div class="w-full md:w-1/2">
+          {% comment %} Check if we have video content first {% endcomment %}
+          {% if section.settings.video != blank %}
+            <div class="relative overflow-hidden flex justify-center align-center {{ rounded_corners }}">
+              {{ section.settings.video | video_tag: 
+                class: 'h-[620px] w-[310px]',
+                width: 310,
+                height: 620,
+                autoplay: false,
+                loop: section.settings.video_loop,
+                muted: section.settings.video_muted,
+                controls: section.settings.video_controls,
+                playsinline: true,
+                preload: 'metadata'
+              }}
+            </div>
+          {% elsif section.settings.video_url != blank %}
+            <div class="relative overflow-hidden flex justify-center align-center {{ rounded_corners }}">
+              {% comment %} Handle external video URLs (YouTube, Vimeo, etc.) {% endcomment %}
+              {% if section.settings.video_url contains 'youtube.com' or section.settings.video_url contains 'youtu.be' %}
+                {% assign video_id = section.settings.video_url | split: '/' | last | split: '?' | first | split: '&' | first %}
+                {% if section.settings.video_url contains 'youtu.be' %}
+                  {% assign video_id = section.settings.video_url | split: '/' | last | split: '?' | first %}
+                {% elsif section.settings.video_url contains 'watch?v=' %}
+                  {% assign video_id = section.settings.video_url | split: 'watch?v=' | last | split: '&' | first %}
+                {% endif %}
+                <div class="relative aspect-video">
+                  <iframe
+                    src="https://www.youtube.com/embed/{{ video_id }}?rel=0&modestbranding=1"
+                    class="absolute inset-0 h-full w-full"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              {% elsif section.settings.video_url contains 'vimeo.com' %}
+                {% assign video_id = section.settings.video_url | split: '/' | last | split: '?' | first %}
+                <div class="relative aspect-video">
+                  <iframe
+                    src="https://player.vimeo.com/video/{{ video_id }}?title=0&byline=0&portrait=0"
+                    class="absolute inset-0 h-full w-full"
+                    frameborder="0"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                          {% else %}
+                <div class="relative overflow-hidden flex justify-center align-center {{ rounded_corners }}">
+                                    <video
+                      class="h-auto w-full object-cover"
+                      width="310"
+                      height="620"
+                      {% if section.settings.video_loop %}loop{% endif %}
+                      {% if section.settings.video_muted %}muted{% endif %}
+                      {% if section.settings.video_controls %}controls{% endif %}
+                      preload="metadata"
+                      playsinline
+                    >
+                    <source src="{{ section.settings.video_url }}" type="video/mp4">
+                    <source src="{{ section.settings.video_url }}" type="video/webm">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              {% endif %}
+            </div>
+          {% elsif section.settings.image != blank %}
+            <div class="relative overflow-hidden flex justify-center align-center {{ rounded_corners }}">
+              <img
+                src="{{ section.settings.image | image_url: width: 310 }}"
+                alt="{{ section.settings.heading | escape }}"
+                class="h-[620px] w-[310px] object-cover"
+                width="310"
+                height="620"
+                loading="lazy"
+              >
+            </div>
+          {% else %}
+            <div class="flex aspect-[4/3] items-center justify-center rounded-lg bg-gray-200">
+              <span class="text-gray-500">{{ 'image' | placeholder_svg_tag: 'w-full h-64' }}</span>
+            </div>
+          {% endif %}
+        </div>
 
-        {% if section.settings.text != blank %}
-          <div class="text-primary-light mb-6 lg:max-w-[400px]">
-            {{ section.settings.text }}
-          </div>
-        {% endif %}
+        <!-- Content Column -->
+        <div class="flex w-full flex-col md:w-1/2 justify-center items-center m-auto">
+          <div class="w-2/3">
+            {% if section.settings.heading != blank %}
+              <h2 class="width text-primary font-base mb-4 {{ section.settings.title_size }}">
+                {{ section.settings.heading }}
+              </h2>
+            {% endif %}
 
-        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-          <div class="mt-2">
-            <a
-              href="{{ section.settings.button_link }}"
-              class="btn {{ section.settings.btn_style }}"
-            >
-              {{ section.settings.button_label }}
-            </a>
+            {% if section.settings.text != blank %}
+              <div class="text-primary-light mb-6 lg:max-w-[400px]">
+                {{ section.settings.text }}
+              </div>
+            {% endif %}
+
+            {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+              <div class="mt-2">
+                <a
+                  href="{{ section.settings.button_link }}"
+                  class="btn {{ section.settings.btn_style }}"
+                >
+                  {{ section.settings.button_label }}
+                </a>
+              </div>
+            {% endif %}
           </div>
-        {% endif %}
+        </div>
       </div>
     </div>
   </div>
@@ -62,7 +140,109 @@
   "settings": [
     {
       "type": "header",
-      "content": "Image"
+      "content": "Layout"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "layout_direction",
+      "label": "Media position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (Mobile)",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "None"
+        },
+        {
+          "value": "pb-2",
+          "label": "Small"
+        },
+        {
+          "value": "pb-4",
+          "label": "Medium"
+        },
+        {
+          "value": "pb-6",
+          "label": "Large"
+        },
+        {
+          "value": "pb-8",
+          "label": "Extra Large"
+        },
+        {
+          "value": "pb-12",
+          "label": "2X Large"
+        },
+        {
+          "value": "pb-16",
+          "label": "3X Large"
+        }
+      ],
+      "default": "pb-4"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom_desktop",
+      "label": "Padding bottom (Desktop)",
+      "options": [
+        {
+          "value": "md:pb-0",
+          "label": "None"
+        },
+        {
+          "value": "md:pb-4",
+          "label": "Small"
+        },
+        {
+          "value": "md:pb-8",
+          "label": "Medium"
+        },
+        {
+          "value": "md:pb-12",
+          "label": "Large"
+        },
+        {
+          "value": "md:pb-16",
+          "label": "Extra Large"
+        },
+        {
+          "value": "md:pb-20",
+          "label": "2X Large"
+        },
+        {
+          "value": "md:pb-24",
+          "label": "3X Large"
+        }
+      ],
+      "default": "md:pb-8"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "paragraph",
+      "content": "Choose either an image, upload a video file, or provide a video URL. Video takes priority over image if both are provided."
     },
     {
       "type": "image_picker",
@@ -70,10 +250,50 @@
       "label": "Image"
     },
     {
+      "type": "video",
+      "id": "video",
+      "label": "Video file"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Supports YouTube, Vimeo, or direct video file URLs"
+    },
+    {
       "type": "checkbox",
       "id": "is_corners_rounded",
       "label": "Rounded corners",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay video",
+      "default": false,
+      "info": "Note: Most browsers require videos to be muted for autoplay to work"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "video_muted",
+      "label": "Mute video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show video controls",
+      "default": true
     },
     {
       "type": "header",
@@ -83,13 +303,37 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "plants for businesses"
+      "default": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title size",
+      "options": [
+        {
+          "value": "text-xl md:text-2xl lg:text-3xl",
+          "label": "Small"
+        },
+        {
+          "value": "text-2xl md:text-3xl lg:text-4xl",
+          "label": "Medium"
+        },
+        {
+          "value": "text-3xl md:text-4xl lg:text-5xl",
+          "label": "Large"
+        },
+        {
+          "value": "text-4xl md:text-5xl lg:text-6xl",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "text-2xl md:text-3xl lg:text-4xl"
     },
     {
       "type": "richtext",
       "id": "text",
       "label": "Text",
-      "default": "<p>We make corporate gifting and commercial installations quick and easy. Speak to our dedicated business team today.</p>"
+      "default": "<p>Text here</p>"
     },
     {
       "type": "header",
@@ -139,12 +383,7 @@
   ],
   "presets": [
     {
-      "name": "Image With Text",
-      "settings": {
-        "heading": "plants for businesses",
-        "text": "<p>We make corporate gifting and commercial installations quick and easy. Speak to our dedicated business team today.</p>",
-        "button_label": "MORE INFO"
-      }
+      "name": "Image With Text"
     }
   ]
 }

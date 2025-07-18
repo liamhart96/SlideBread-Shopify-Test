@@ -193,7 +193,7 @@ function ColorSelector({
 
   return (
     <div className={twMerge("", className)}>
-      <label className="font-heading-serif mb-2 block">
+      <label className="font-heading-serif mb-2 block text-left">
         {label}:{" "}
         <span className="font-heading-serif">
           {colorConfig?.[selectedValue]?.name || selectedValue}

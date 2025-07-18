@@ -1,0 +1,124 @@
+<section class="relative">
+  <div class="theme-container p-4">
+    <div class="bg-white p-8 rounded-3xl shadow-[0_0_0_1px_#0000000f,0_1px_1px_-0.5px_#0000000f,0_3px_3px_-1.5px_#0000000f,0_6px_6px_-3px_#0000000f,0_12px_12px_-6px_#0000000f,0_24px_24px_-12px_#0000000f]">
+
+    {% if section.settings.heading != blank %}
+      <h2 class="text-2xl font-bold text-center">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="mt-6">
+      {% for block in section.blocks %}
+        {% if block.type == 'accordion_item' %}
+                <details
+        class="group overflow-hidden transition-all duration-300 ease-in-out"
+        {% if block.settings.open %}
+          open
+        {% endif %}
+        data-animated-details
+      >
+        <summary class="flex cursor-pointer items-center justify-start font-medium gap-2 transition-colors duration-200 focus:outline-none">
+          <span class="transform transition-transform duration-300 group-open:rotate-180">
+            {% render 'icons', icon: 'chevron' %}
+          </span>
+          <span class="text-lg font-medium font-heading-serif">{{ block.settings.title }}</span>
+        </summary>
+        <div class="details-content prose px-3 py-4 transition-all duration-300 ease-in-out text-left">
+          {{ block.settings.content }}
+        </div>
+      </details>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Accordion",
+  "tag": "section",
+  "class": "accordion-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h3",
+          "label": "Small"
+        }
+      ],
+      "default": "h2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion_item",
+      "name": "Accordion Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Accordion Item"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Add your content here.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion",
+      "blocks": [
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "What is your return policy?",
+            "content": "<p>We offer a 30-day return policy on all items.</p>"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "How long does shipping take?",
+            "content": "<p>Standard shipping takes 3-5 business days.</p>"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Do you offer international shipping?",
+            "content": "<p>Yes, we ship worldwide with varying delivery times.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

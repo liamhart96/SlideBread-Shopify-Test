@@ -22,11 +22,11 @@
 {% endfor %}
 
 {% if attributes != '' %}
-  <div class="mb-4 flex justify-center gap-4 md:justify-start">
+  <div class="mb-4 flex justify-start gap-4 md:justify-start">
     <div class="flex gap-2">
       {% assign attribute_array = attributes | split: '|' %}
       {% for attribute in attribute_array %}
-        <span class="text-primary">{{ attribute }}</span>
+        <span class="text-primary text-left text-sm">{{ attribute }}</span>
         {% unless forloop.last %}|{% endunless %}
       {% endfor %}
     </div>
