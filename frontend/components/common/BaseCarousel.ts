@@ -1,42 +1,42 @@
-import type Flickity from "flickity";
+import { Swiper } from "swiper";
+import type { SwiperOptions } from "swiper/types";
 
-import { FlickityService } from "@/services/FlickityService";
+interface SwiperElement extends HTMLElement {
+  swiper?: Swiper;
+}
 
 export abstract class BaseCarousel {
   protected selector: string;
-  protected config: Flickity.Options;
+  protected config: SwiperOptions;
 
-  constructor(selector: string, config: Flickity.Options) {
+  constructor(selector: string, config: SwiperOptions) {
     this.selector = selector;
     this.config = config;
   }
 
   init(): void {
-    FlickityService.init(this.selector, this.config);
+    const element = document.querySelector(this.selector);
+    if (element) {
+      new Swiper(element as HTMLElement, this.config);
+    }
   }
 
   destroy(): void {
-    FlickityService.destroy(this.selector);
+    const element = document.querySelector(this.selector) as SwiperElement;
+    if (element && element.swiper) {
+      element.swiper.destroy();
+    }
   }
 
-  protected getInstance(): Flickity | null {
-    return FlickityService.getInstance(this.selector);
+  protected getInstance(): Swiper | null {
+    const element = document.querySelector(this.selector) as SwiperElement;
+    return element?.swiper || null;
   }
 
   select(index: number): void {
     const instance = this.getInstance();
     if (instance) {
-      instance.select(index);
+      instance.slideTo(index);
     }
-  }
-
-  getSelectedIndex(): number {
-    const instance = this.getInstance();
-    return instance?.selectedIndex ?? 0;
-  }
-
-  getTotalSlides(): number {
-    const instance = this.getInstance();
-    return instance?.slides?.length ?? 0;
   }
 }

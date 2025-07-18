@@ -25,12 +25,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "flickity": "^2.2.2",
-    "flickity-as-nav-for": "^2.0.1",
-    "flickity-imagesloaded": "^2.0.0",
-    "inner-image-zoom": "^1.0.1",
     "lucide-react": "^0.483.0",
-    "smooth-zoom": "^1.5.0",
+    "swiper": "^11.2.10",
     "tailwind-merge": "^3.0.2"
   },
   "devDependencies": {
@@ -39,7 +35,6 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.14",
-    "@types/flickity": "^2.2.11",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.3.4",

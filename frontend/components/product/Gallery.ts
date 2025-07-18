@@ -1,7 +1,11 @@
-import "inner-image-zoom/lib/styles.min.css";
-import Flickity from "flickity";
+import { Swiper } from "swiper";
+import { Navigation, Thumbs, Mousewheel, Zoom } from "swiper/modules";
 
-import { BaseCarousel } from "@/components/common/BaseCarousel";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import "swiper/css/zoom";
 
 interface VariantImage {
   src: string;
@@ -10,34 +14,25 @@ interface VariantImage {
   height: number;
 }
 
-export class Gallery extends BaseCarousel {
+export class Gallery {
   private static instance: Gallery;
-  private modal: HTMLDialogElement | null = null;
-  private mainGallery: Flickity | null = null;
-  private navGallery: Flickity | null = null;
+  private mainSwiper: Swiper | null = null;
+  private navSwiper: Swiper | null = null;
   private originalImages: VariantImage[] = [];
   private currentImages: VariantImage[] = [];
+  private isVertical: boolean = true;
 
-  constructor(selector: string) {
-    const config: Flickity.Options = {
-      prevNextButtons: false,
-      pageDots: false,
-      imagesLoaded: true,
-      cellAlign: "left",
-      contain: true,
-      groupCells: "100%",
-    };
-    super(selector, config);
-
+  constructor() {
     this.storeOriginalImages();
     this.initializeGalleries();
-    this.initializeModal();
     this.initializeVariantListener();
     window.addEventListener("beforeunload", () => this.destroy());
   }
 
   private storeOriginalImages(): void {
-    const imageElements = document.querySelectorAll(".product-gallery-carousel-main img");
+    const imageElements = document.querySelectorAll(
+      ".product-gallery-carousel-main .swiper-slide img"
+    );
     this.originalImages = Array.from(imageElements).map((img) => ({
       src: (img as HTMLImageElement).src,
       alt: (img as HTMLImageElement).alt,
@@ -75,6 +70,8 @@ export class Gallery extends BaseCarousel {
     );
 
     if (validUrls.length === 0) {
+      // If no valid variant images, reset to show all original images
+      this.resetToOriginalImages();
       return;
     }
 
@@ -90,195 +87,88 @@ export class Gallery extends BaseCarousel {
   }
 
   private resetToOriginalImages(): void {
-    // Show all original images
-    this.showAllImages(".product-gallery-carousel-main");
-    this.showAllImages(".product-gallery-carousel-nav");
-    this.showAllImages(".gallery-modal-carousel");
-
     this.currentImages = [...this.originalImages];
-  }
-
-  private showAllImages(selector: string): void {
-    const carousel = document.querySelector(selector);
-    if (!carousel) return;
-
-    const existingCells = carousel.querySelectorAll(".carousel-cell");
-    const existingImages = carousel.querySelectorAll("img");
-
-    // Show all cells and restore original image sources
-    existingCells.forEach((cell, index) => {
-      (cell as HTMLElement).style.display = "";
-
-      if (index < this.originalImages.length) {
-        const img = existingImages[index] as HTMLImageElement;
-        let size = "large";
-        if (selector.includes("nav")) {
-          size = "small";
-        } else if (selector.includes("modal")) {
-          size = "2048x";
-        }
-        const imageUrl = this.getImageUrl(this.originalImages[index].src, size);
-        img.src = imageUrl;
-        img.alt = this.originalImages[index].alt;
-      }
-    });
-
-    // Refresh Flickity to recalculate positions
-    if (selector === ".product-gallery-carousel-main" && this.mainGallery) {
-      setTimeout(() => {
-        this.mainGallery?.reposition();
-      }, 100);
-    }
-
-    if (selector === ".product-gallery-carousel-nav" && this.navGallery) {
-      setTimeout(() => {
-        this.navGallery?.reposition();
-      }, 100);
-    }
+    this.refreshGalleryWithImages(this.originalImages);
   }
 
   private refreshGalleryWithImages(images: VariantImage[]): void {
-    // Safety check: if no images or empty array, don't update
-    if (!images || images.length === 0) {
-      return;
-    }
+    // Update main gallery
+    this.updateSwiperImages(".product-gallery-carousel-main", images, "large");
 
-    // Filter out invalid images
-    const validImages = images.filter((img) => img.src && img.src.trim() !== "");
-    if (validImages.length === 0) {
-      return;
-    }
+    // Update nav gallery
+    this.updateSwiperImages(".product-gallery-carousel-nav", images, "small");
 
-    try {
-      // Instead of rebuilding, just update existing image sources
-      this.updateExistingImages(".product-gallery-carousel-main", validImages, "large");
-      this.updateExistingImages(".product-gallery-carousel-nav", validImages, "small");
-      this.updateExistingImages(".gallery-modal-carousel", validImages, "2048x");
-    } catch {
-      // Silent error handling
-    }
-  }
-
-  private updateExistingImages(selector: string, images: VariantImage[], size: string): void {
-    const carousel = document.querySelector(selector);
-    if (!carousel) {
-      return;
-    }
-
-    // Get the appropriate Flickity instance
-    let flickityInstance: Flickity | null = null;
-    if (selector === ".product-gallery-carousel-main") {
-      flickityInstance = this.mainGallery;
-    } else if (selector === ".product-gallery-carousel-nav") {
-      flickityInstance = this.navGallery;
-    }
-
-    if (!flickityInstance) {
-      return;
-    }
-
-    // Add loading state during variant change
-    carousel.classList.add("gallery-loading");
-    carousel.classList.remove("gallery-loaded");
-
-    // Store current selected index to restore later
-    const currentIndex = flickityInstance.selectedIndex;
-
-    // Remove all existing cells from Flickity
-    const existingCells = carousel.querySelectorAll(".carousel-cell");
-    existingCells.forEach((cell) => {
-      flickityInstance?.remove(cell);
-    });
-
-    // Add back only the cells for variant images
-    images.forEach((variantImage, index) => {
-      // Create a new cell element with proper structure
-      const cellElement = document.createElement("div");
-      if (selector === ".product-gallery-carousel-nav") {
-        cellElement.className = "carousel-cell overflow-hidden rounded-lg";
-      } else {
-        cellElement.className = "carousel-cell group relative w-full overflow-hidden md:rounded-lg";
-      }
-
-      const imgElement = document.createElement("img");
-      const imageUrl = this.getImageUrl(variantImage.src, size);
-      imgElement.src = imageUrl;
-      imgElement.alt = variantImage.alt || `Product image ${index + 1}`;
-      imgElement.className = "h-full w-full object-cover";
-      imgElement.loading = "lazy";
-
-      // Set proper dimensions for different image sizes
-      if (size === "small") {
-        imgElement.width = 200;
-        imgElement.height = 200;
-      } else if (size === "large") {
-        imgElement.width = 800;
-        imgElement.height = 800;
-      } else {
-        imgElement.width = 2048;
-        imgElement.height = 2048;
-      }
-
-      cellElement.appendChild(imgElement);
-
-      // Add the cell to Flickity
-      flickityInstance?.append(cellElement);
-    });
-
-    // Restore selection and remove loading state
+    // Re-establish thumbs relationship and update active thumbnail after both galleries are updated
     setTimeout(() => {
-      if (images.length > 0) {
-        const indexToSelect = currentIndex < images.length ? currentIndex : 0;
-        flickityInstance?.select(indexToSelect, false, true);
-      }
-      flickityInstance?.resize();
+      if (this.mainSwiper && this.navSwiper) {
+        // Force update both swipers
+        this.mainSwiper.update();
+        this.navSwiper.update();
 
-      // Remove loading state after images are loaded
-      carousel.classList.remove("gallery-loading");
-      carousel.classList.add("gallery-loaded");
+        // Reset to first slide and update active thumbnail
+        this.mainSwiper.slideTo(0);
+        this.updateActiveThumbnail();
+      }
     }, 100);
   }
 
-  private addGalleryButtons(cell: HTMLElement): void {
-    // Zoom button
-    const zoomButton = document.createElement("button");
-    zoomButton.className =
-      "gallery-zoom-button absolute bottom-16 right-4 flex cursor-pointer items-center justify-center rounded-full bg-white/50 p-2 transition-colors duration-200 hover:bg-white/70";
-    zoomButton.setAttribute("aria-label", "Enlarge image");
-    zoomButton.innerHTML = `<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-    </svg>`;
+  private updateSwiperImages(selector: string, images: VariantImage[], size: string): void {
+    const swiperContainer = document.querySelector(selector);
+    if (!swiperContainer) return;
 
-    // Heart button
-    const heartButton = document.createElement("button");
-    heartButton.className =
-      "absolute bottom-4 right-4 flex cursor-pointer items-center justify-center rounded-full bg-white/50 p-2 transition-colors duration-200 hover:bg-white/70";
-    heartButton.setAttribute("aria-label", "Add to favorites");
-    heartButton.innerHTML = `<svg class="w-5 h-5 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-    </svg>`;
+    const swiperWrapper = swiperContainer.querySelector(".swiper-wrapper");
+    if (!swiperWrapper) return;
 
-    cell.appendChild(zoomButton);
-    cell.appendChild(heartButton);
+    // Clear existing slides
+    swiperWrapper.innerHTML = "";
 
-    // Add click event for zoom button
-    zoomButton.addEventListener("click", () => {
-      this.modal?.showModal();
-      this.init();
-      if (this.mainGallery) {
-        this.select(this.mainGallery.selectedIndex);
+    // Add new slides
+    images.forEach((image) => {
+      const slide = document.createElement("div");
+      slide.className = "swiper-slide";
+
+      if (selector === ".product-gallery-carousel-main") {
+        // Add zoom container for main gallery
+        const zoomContainer = document.createElement("div");
+        zoomContainer.className = "swiper-zoom-container";
+
+        const img = document.createElement("img");
+        img.src = this.getImageUrl(image.src, size);
+        img.alt = image.alt;
+        img.className = "h-full w-full object-cover";
+        img.loading = "lazy";
+
+        zoomContainer.appendChild(img);
+        slide.appendChild(zoomContainer);
+      } else {
+        // Regular structure for nav gallery
+        const img = document.createElement("img");
+        img.src = this.getImageUrl(image.src, size);
+        img.alt = image.alt;
+        img.className = "h-full w-full object-cover";
+        img.loading = "lazy";
+
+        slide.appendChild(img);
       }
+
+      swiperWrapper.appendChild(slide);
     });
+
+    // Update Swiper instances
+    if (selector === ".product-gallery-carousel-main" && this.mainSwiper) {
+      this.mainSwiper.update();
+    }
+    if (selector === ".product-gallery-carousel-nav" && this.navSwiper) {
+      this.navSwiper.update();
+    }
   }
 
   private getImageUrl(src: string, size: string): string {
     // Handle Shopify image URLs
     if (src.includes("shopify")) {
-      // Extract the base URL and add size parameter
       const baseUrl = src.split("?")[0];
       return `${baseUrl}?width=${this.getSizePixels(size)}`;
     }
-    // For other URLs, return as-is
     return src;
   }
 
@@ -293,32 +183,32 @@ export class Gallery extends BaseCarousel {
   }
 
   private initializeGalleries(): void {
-    const navGalleryElement = document.querySelector(
-      ".product-gallery-carousel-nav"
-    ) as HTMLElement;
     const mainGalleryElement = document.querySelector(
       ".product-gallery-carousel-main"
     ) as HTMLElement;
+    const navGalleryElement = document.querySelector(
+      ".product-gallery-carousel-nav"
+    ) as HTMLElement;
 
-    if (!navGalleryElement || !mainGalleryElement) {
+    if (!mainGalleryElement || !navGalleryElement) {
       return;
     }
 
-    // Add loading state classes
-    navGalleryElement.classList.add("gallery-loading");
-    mainGalleryElement.classList.add("gallery-loading");
+    // Check if we're on mobile
+    const isMobile = window.innerWidth < 768;
 
-    // Initialize nav gallery first
-    this.navGallery = new Flickity(navGalleryElement, {
-      asNavFor: ".product-gallery-carousel-main",
-      pageDots: false,
-      groupCells: "100%",
-      cellAlign: "left",
-      prevNextButtons: false,
-      imagesLoaded: true,
+    // Initialize navigation gallery first
+    this.navSwiper = new Swiper(navGalleryElement, {
+      modules: [Navigation, Thumbs, Mousewheel, Zoom],
+      direction: isMobile ? "horizontal" : "vertical",
+      slidesPerView: isMobile ? "auto" : 5,
+      spaceBetween: isMobile ? 0 : 20,
+      watchSlidesProgress: true,
+      centeredSlides: false,
+      mousewheel: !isMobile,
+      freeMode: true,
       on: {
-        ready: () => {
-          // Remove loading state when nav gallery is ready
+        init: () => {
           navGalleryElement.classList.remove("gallery-loading");
           navGalleryElement.classList.add("gallery-loaded");
         },
@@ -326,47 +216,85 @@ export class Gallery extends BaseCarousel {
     });
 
     // Initialize main gallery
-    this.mainGallery = new Flickity(mainGalleryElement, {
-      prevNextButtons: true,
-      pageDots: true,
-      cellAlign: "left",
-      imagesLoaded: true,
+    this.mainSwiper = new Swiper(mainGalleryElement, {
+      modules: [Navigation, Thumbs, Mousewheel, Zoom],
+      direction: isMobile ? "horizontal" : this.isVertical ? "vertical" : "horizontal",
+      slidesPerView: 1,
+      spaceBetween: 0,
+      centeredSlides: true,
+      mousewheel: !isMobile
+        ? {
+            forceToAxis: true,
+            sensitivity: 1,
+          }
+        : false,
+      zoom: {
+        maxRatio: 3, // Maximum zoom level (3x)
+        minRatio: 1, // Minimum zoom level (1x = no zoom)
+        toggle: true, // Enable double-tap to zoom
+      },
+      thumbs: {
+        swiper: this.navSwiper,
+      },
       on: {
-        ready: () => {
-          // Remove loading state when main gallery is ready
+        init: () => {
           mainGalleryElement.classList.remove("gallery-loading");
           mainGalleryElement.classList.add("gallery-loaded");
+
+          // Force update thumbs after initialization
+          setTimeout(() => {
+            if (this.mainSwiper && this.navSwiper) {
+              this.mainSwiper.update();
+              this.navSwiper.update();
+              this.updateActiveThumbnail();
+            }
+          }, 100);
+        },
+        slideChange: () => {
+          // Handle slide change events
+          this.onSlideChange();
         },
       },
     });
-  }
 
-  private initializeModal(): void {
-    this.modal = document.querySelector(".gallery-modal") as HTMLDialogElement;
-    if (!this.modal) return;
-
-    // Handle zoom button clicks
-    document.addEventListener("click", (event) => {
-      if ((event.target as HTMLElement).closest(".gallery-zoom-button")) {
-        this.modal?.showModal();
-        this.init();
-
-        // Sync with main gallery's current index
-        if (this.mainGallery) {
-          this.select(this.mainGallery.selectedIndex);
-        }
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      const newIsMobile = window.innerWidth < 768;
+      if (newIsMobile !== isMobile) {
+        this.destroy();
+        this.initializeGalleries();
       }
     });
+  }
 
-    const closeButton = this.modal.querySelector(".gallery-modal-close");
-    closeButton?.addEventListener("click", () => {
-      this.modal?.close();
-      this.destroy();
+  private reinitializeGalleries(): void {
+    this.destroy();
+    this.initializeGalleries();
+  }
+
+  private onSlideChange(): void {
+    // Add any slide change logic here
+    console.log("Slide changed to:", this.mainSwiper?.activeIndex);
+    
+    // Ensure active thumbnail is properly highlighted
+    this.updateActiveThumbnail();
+  }
+
+  private updateActiveThumbnail(): void {
+    if (!this.mainSwiper || !this.navSwiper) return;
+    
+    const activeIndex = this.mainSwiper.activeIndex;
+    const navSlides = this.navSwiper.slides;
+
+    // Remove active class from all thumbnails
+    navSlides.forEach((slide) => {
+      slide.classList.remove("swiper-slide-thumb-active");
     });
 
-    this.modal.addEventListener("close", () => {
-      this.destroy();
-    });
+    // Add active class to current thumbnail
+    if (navSlides[activeIndex]) {
+      navSlides[activeIndex].classList.add("swiper-slide-thumb-active");
+    }
   }
 
   // Public method to update images from external sources
@@ -379,22 +307,31 @@ export class Gallery extends BaseCarousel {
     return this.currentImages;
   }
 
-  static initialize(selector: string): Gallery {
+  // Public method to toggle vertical sliding
+  public toggleVerticalSliding(enable: boolean = true): void {
+    this.isVertical = enable;
+
+    if (this.mainSwiper) {
+      this.mainSwiper.destroy();
+      this.initializeGalleries();
+    }
+  }
+
+  static initialize(): Gallery {
     if (!Gallery.instance) {
-      Gallery.instance = new Gallery(selector);
+      Gallery.instance = new Gallery();
     }
     return Gallery.instance;
   }
 
-  override destroy(): void {
-    if (this.mainGallery) {
-      this.mainGallery.destroy();
-      this.mainGallery = null;
+  destroy(): void {
+    if (this.mainSwiper) {
+      this.mainSwiper.destroy();
+      this.mainSwiper = null;
     }
-    if (this.navGallery) {
-      this.navGallery.destroy();
-      this.navGallery = null;
+    if (this.navSwiper) {
+      this.navSwiper.destroy();
+      this.navSwiper = null;
     }
-    super.destroy();
   }
 }

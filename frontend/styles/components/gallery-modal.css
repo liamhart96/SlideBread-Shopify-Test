@@ -43,37 +43,6 @@
   @apply object-contain;
 }
 
-/* Flickity custom styles */
-.gallery-modal-carousel .flickity-viewport {
-  @apply h-[100vh] w-full;
-}
-
-.gallery-modal-carousel .flickity-slider {
-  @apply flex items-center justify-center;
-}
-
-.gallery-modal-carousel .flickity-button {
-  @apply absolute bottom-1 top-auto h-11 w-11 rounded-full bg-white/90;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.gallery-modal-carousel .flickity-button.previous {
-  left: unset;
-  @apply mr-32;
-}
-
-.gallery-modal-carousel .flickity-button.next {
-  right: unset;
-  @apply ml-32;
-}
-
-.gallery-modal-carousel .flickity-button:hover {
-  @apply bg-white/70;
-}
-
-.gallery-modal-carousel .flickity-button-icon {
-}
-
 .gallery-zoom-button:focus {
   @apply outline-none;
 }
