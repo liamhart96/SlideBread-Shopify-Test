@@ -16,4 +16,5 @@ initializeGallery();
 // Import other components
 import "@/components/product/AddToCart";
 import "@/components/product/Countdown";
+import "@/components/product/PromotionalBanners";
 import "@/components/product/VariantSelector";

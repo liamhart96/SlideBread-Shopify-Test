@@ -21,6 +21,8 @@
                 {%- render 'product-attributes', product: current_product -%}
               {% when 'variant_picker' %}
                 {%- render 'product-variant-picker', product: current_product -%}
+              {% when 'promotional_banners' %}
+                {%- render 'product-promotional-banners', block: block, product: current_product -%}
               {% when 'buy_buttons' %}
                 {%- render 'product-buy-button', product: current_product -%}                
             {% endcase %}
@@ -202,6 +204,64 @@
           "info": "Second upsell product (when using specific selection)"
         }
       ]
+    },
+    {
+      "type": "promotional_banners",
+      "name": "Promotional Banners",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Display Options"
+        },
+        {
+          "type": "paragraph",
+          "content": "Add promotional banners using product tags. Format: 'promo-{color}:{banner text}'. Available colors: green, red, blue, orange, gray, purple. Example: 'promo-green:Duties and Taxes Paid'. Special: Use 'promo-red:Overstock Sale' for dynamic discount percentage."
+        },
+        {
+          "type": "select",
+          "id": "banner_spacing",
+          "label": "Space Between Banners",
+          "options": [
+            {
+              "value": "none",
+              "label": "No Space"
+            },
+            {
+              "value": "small",
+              "label": "Small (4px)"
+            },
+            {
+              "value": "medium",
+              "label": "Medium (8px)"
+            },
+            {
+              "value": "large",
+              "label": "Large (16px)"
+            }
+          ],
+          "default": "small"
+        },
+        {
+          "type": "select",
+          "id": "banner_size",
+          "label": "Banner Size",
+          "options": [
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            }
+          ],
+          "default": "medium"
+        }
+      ]
     }
   ],
   "presets": [
@@ -212,3 +272,4 @@
   ]
 }
 {% endschema %}
+

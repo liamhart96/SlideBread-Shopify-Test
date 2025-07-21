@@ -49,7 +49,7 @@
     ]
   },
   "frontend/entrypoints/product.ts": {
-    "file": "product.BQ93lRCt.min.js",
+    "file": "product.Cntpb6j3.min.js",
     "name": "product",
     "src": "frontend/entrypoints/product.ts",
     "isEntry": true,
@@ -62,7 +62,7 @@
     ]
   },
   "frontend/entrypoints/theme.css": {
-    "file": "theme.DH4BEB4c.min.css",
+    "file": "theme.BjZc6P8Z.min.css",
     "src": "frontend/entrypoints/theme.css",
     "isEntry": true
   },
