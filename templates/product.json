@@ -28,6 +28,13 @@
           "type": "variant_picker",
           "settings": {}
         },
+        "promotional_banners_ABC123": {
+          "type": "promotional_banners",
+          "settings": {
+            "banner_spacing": "medium",
+            "banner_size": "medium"
+          }
+        },
         "buy_buttons_brTMYq": {
           "type": "buy_buttons",
           "settings": {}
@@ -44,8 +51,9 @@
       },
       "block_order": [
         "product_attributes_rWnN63",
-        "product_price_XrcEnE",
         "variant_picker_mtQjcP",
+        "promotional_banners_ABC123",
+        "product_price_XrcEnE",
         "buy_buttons_brTMYq",
         "upsells_ABC123"
       ],
@@ -99,6 +107,13 @@
         "btn_style": "btn-primary"
       }
     },
+    "component_product_info_GjTzFU": {
+      "type": "component-product-info",
+      "name": "Product Info",
+      "settings": {
+        "heading": "Info"
+      }
+    },
     "component_accordion_kgawbf": {
       "type": "component-accordion",
       "blocks": {
@@ -136,69 +151,6 @@
       "settings": {
         "heading": "Frequently Asked Questions",
         "heading_size": "h2"
-      }
-    },
-    "component_product_info_GjTzFU": {
-      "type": "component-product-info",
-      "blocks": {
-        "info_column_XWekAV": {
-          "type": "info_column",
-          "settings": {
-            "title": "Materials",
-            "content": "Vegetable-tanned Horween leather|Ultra-thin fiberglass body|Soft microfiber|Microsuction",
-            "display_as_bullets": true,
-            "use_metafield": false,
-            "metafield_namespace": "",
-            "metafield_title": "",
-            "metafield_content": ""
-          }
-        },
-        "info_column_hGdFKE": {
-          "type": "info_column",
-          "settings": {
-            "title": "Technical",
-            "content": "Thickness: 2.20mm|Raised polycarbonate camera ring|MagSafe & wireless charging compatible",
-            "display_as_bullets": true,
-            "use_metafield": false,
-            "metafield_namespace": "",
-            "metafield_title": "",
-            "metafield_content": ""
-          }
-        },
-        "info_column_cAnyNQ": {
-          "type": "info_column",
-          "settings": {
-            "title": "Devices",
-            "content": "Compatible with iPhone 16 Pro Max",
-            "display_as_bullets": false,
-            "use_metafield": false,
-            "metafield_namespace": "",
-            "metafield_title": "",
-            "metafield_content": ""
-          }
-        },
-        "info_column_LqLrPm": {
-          "type": "info_column",
-          "settings": {
-            "title": "Product Guide",
-            "content": "Check out the product guide here",
-            "display_as_bullets": false,
-            "use_metafield": false,
-            "metafield_namespace": "",
-            "metafield_title": "",
-            "metafield_content": ""
-          }
-        }
-      },
-      "block_order": [
-        "info_column_XWekAV",
-        "info_column_hGdFKE",
-        "info_column_cAnyNQ",
-        "info_column_LqLrPm"
-      ],
-      "name": "Product Info",
-      "settings": {
-        "heading": "Info"
       }
     }
   },

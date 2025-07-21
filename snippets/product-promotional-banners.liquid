@@ -1,0 +1,107 @@
+{% comment %}
+  Renders promotional banners for pdp's based on product tags
+  Accepts:
+  - block: {Object} Block object with display settings
+  - product: {Object} Product object with tags
+
+  Tag format: "promo-{color}:{banner text}"
+  Example tags:
+  - "promo-green:Duties and Taxes Paid"
+  - "promo-red:Overstock Sale: 30% Off"
+  - "promo-blue:Buy a Case, Get a Free Screen Protector"
+  - "promo-orange:Limited Time Offer"
+  - "promo-gray:Free Shipping"
+{% endcomment %}
+
+{% comment %} Define spacing classes from block settings {% endcomment %}
+{% assign spacing_class = 'space-x-1 space-y-1' %}
+{% case block.settings.banner_spacing %}
+  {% when 'none' %}
+    {% assign spacing_class = 'space-x-0 space-y-0' %}
+  {% when 'small' %}
+    {% assign spacing_class = 'space-x-1 space-y-1' %}
+  {% when 'medium' %}
+    {% assign spacing_class = 'space-x-2 space-y-2' %}
+  {% when 'large' %}
+    {% assign spacing_class = 'space-x-4 space-y-4' %}
+{% endcase %}
+
+{% comment %} Define size classes from block settings {% endcomment %}
+{% assign size_classes = 'px-3 py-2 text-sm font-medium' %}
+{% case block.settings.banner_size %}
+  {% when 'small' %}
+    {% assign size_classes = 'px-2 py-1 text-xs font-medium' %}
+  {% when 'medium' %}
+    {% assign size_classes = 'px-3 py-2 text-sm font-medium' %}
+  {% when 'large' %}
+    {% assign size_classes = 'px-4 py-3 text-base font-medium' %}
+{% endcase %}
+
+{% comment %} Find promotional banner tags {% endcomment %}
+{% assign banner_tags = '' %}
+{% for tag in product.tags %}
+  {% if tag contains 'promo-' %}
+    {% if banner_tags == '' %}
+      {% assign banner_tags = tag %}
+    {% else %}
+      {% assign banner_tags = banner_tags | append: '|' | append: tag %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} Render banners if any promotional tags exist {% endcomment %}
+{% if banner_tags != '' %}
+  {% assign banner_array = banner_tags | split: '|' %}
+  <div class="promotional-banners my-4 flex flex-row flex-wrap {{ spacing_class }}">
+    {% for banner_tag in banner_array %}
+      {% if banner_tag contains ':' %}
+        {% assign tag_parts = banner_tag | split: ':' %}
+        {% assign color_part = tag_parts[0] %}
+        {% assign banner_text = tag_parts[1] %}
+        
+        {% comment %} Handle dynamic pricing for Overstock Sale banners {% endcomment %}
+        {% assign is_overstock_banner = false %}
+        {% assign initial_display_style = '' %}
+        {% if banner_text contains 'Overstock Sale' %}
+          {% assign is_overstock_banner = true %}
+          {% assign current_variant = product.selected_or_first_available_variant %}
+          {% if current_variant.compare_at_price > current_variant.price %}
+            {% assign discount_percentage = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price | round %}
+            {% assign banner_text = 'Overstock Sale: ' | append: discount_percentage | append: '% Off' %}
+            {% assign initial_display_style = 'display: block;' %}
+          {% else %}
+            {% comment %} Render banner but hide it initially {% endcomment %}
+            {% assign banner_text = 'Overstock Sale' %}
+            {% assign initial_display_style = 'display: none;' %}
+          {% endif %}
+        {% endif %}
+        
+        {% comment %} Define color classes {% endcomment %}
+        {% assign banner_classes = '' %}
+        {% case color_part %}
+          {% when 'promo-green' %}
+            {% assign banner_classes = 'bg-green-100 text-green-800 border border-green-200' %}
+          {% when 'promo-red' %}
+            {% assign banner_classes = 'bg-red-100 text-red-800 border border-red-200' %}
+          {% when 'promo-blue' %}
+            {% assign banner_classes = 'bg-blue-100 text-blue-800 border border-blue-200' %}
+          {% when 'promo-orange' %}
+            {% assign banner_classes = 'bg-orange-100 text-orange-800 border border-orange-200' %}
+          {% when 'promo-gray' %}
+            {% assign banner_classes = 'bg-gray-100 text-gray-800 border border-gray-200' %}
+          {% when 'promo-purple' %}
+            {% assign banner_classes = 'bg-purple-100 text-purple-800 border border-purple-200' %}
+          {% else %}
+            {% assign banner_classes = 'bg-blue-100 text-blue-800 border border-blue-200' %}
+        {% endcase %}
+        
+        <div 
+          class="promotional-banner rounded-lg text-center {{ size_classes }} {{ banner_classes }}"
+          {% if is_overstock_banner %}data-dynamic-banner="overstock" style="{{ initial_display_style }}"{% endif %}
+        >
+          {{ banner_text | escape }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %} 
